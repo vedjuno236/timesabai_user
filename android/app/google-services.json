@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746385350148",
+    "project_id": "timesabai-3d513",
+    "storage_bucket": "timesabai-3d513.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746385350148:android:8c7db0e09ff47394109f51",
+        "android_client_info": {
+          "package_name": "com.example.timesabai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNQZ27Wqjpn6aYTiYh4oGmTHuINGyDjR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

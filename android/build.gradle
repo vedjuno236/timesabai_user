@@ -1,0 +1,38 @@
+
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.4' // Ensure you have the correct Android Gradle Plugin version
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31" // Ensure Kotlin version is appropriate
+    }
+}
+
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
+//dependencies {
+//    // Firebase dependencies
+//    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+//    implementation("com.google.firebase:firebase-analytics-ktx") // Use the KTX version for better support
+//}
+
