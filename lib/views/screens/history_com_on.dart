@@ -80,7 +80,7 @@ class _HistoryState extends State<History> {
               onTap: () async {
                 final pickedDate = await showMonthPicker(
                   context: context,
-                  initialDate: DateTime.now(),
+                  initialDate: selectedDate ?? DateTime.now(),
                   firstDate: DateTime(2024),
                   lastDate: DateTime(2050),
                 );
@@ -163,14 +163,18 @@ class _HistoryState extends State<History> {
 
                       // Determine status and other fields
                       String status;
-                      String checkIn = '--:--';
-                      String checkOut = '--:--';
+                      String checkInAM = '--:--';
+                      String checkOutAM = '--:--';
+                      String checkInPM = '--:--';
+                      String checkOutPM = '--:--';
 
                       if (record != null) {
                         // Use Firebase record if available
                         status = record['status'];
-                        checkIn = record['checkIn'];
-                        checkOut = record['checkOut'];
+                        checkInAM = record['clockInAM'];
+                        checkOutAM = record['clockOutAM'];
+                        checkInPM = record['clockInPM'];
+                        checkOutPM = record['clockOutPM'];
                       } else {
                         // If no record, check if it's a weekend
                         status = isWeekend(currentDay) ? 'ວັນພັກ' : 'ຂາດວຽກ';
@@ -181,6 +185,7 @@ class _HistoryState extends State<History> {
                         child: Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
                                   height: 90,
@@ -217,23 +222,39 @@ class _HistoryState extends State<History> {
                                       'ບັນທືກເຂົ້າ',
                                       style: GoogleFonts.notoSansLao(
                                         textStyle: const TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      checkIn,
-                                      style: GoogleFonts.notoSansLao(
-                                        textStyle: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: record != null
-                                              ? Colors.blue
-                                              : Colors.grey,
+                                    Column(
+                                      children: [
+                                        Text(
+                                          checkInAM,
+                                          style: GoogleFonts.notoSansLao(
+                                            textStyle: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: record != null
+                                                  ? Colors.blue
+                                                  : Colors.grey,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Text(
+                                          checkInPM,
+                                          style: GoogleFonts.notoSansLao(
+                                            textStyle: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: record != null
+                                                  ? Colors.blue
+                                                  : Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -244,44 +265,64 @@ class _HistoryState extends State<History> {
                                       'ບັນທືກອອກ',
                                       style: GoogleFonts.notoSansLao(
                                         textStyle: const TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      checkOut,
-                                      style: GoogleFonts.notoSansLao(
-                                        textStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: record != null
-                                              ? Colors.redAccent
-                                              : Colors.grey,
+                                    Column(
+                                      children: [
+                                        Text(
+                                          checkOutAM,
+                                          style: GoogleFonts.notoSansLao(
+                                            textStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: record != null
+                                                  ? Colors.redAccent
+                                                  : Colors.grey,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Text(
+                                          checkOutPM,
+                                          style: GoogleFonts.notoSansLao(
+                                            textStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: record != null
+                                                  ? Colors.redAccent
+                                                  : Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                const SizedBox(width: 20),
-                                OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: getStatusColor(status),
-                                    side:
-                                        const BorderSide(color: Colors.black12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                SizedBox(
+                                  height: 35,
+                                  width: 75,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      backgroundColor: getStatusColor(status),
+                                      side: BorderSide(
+                                          color: getStatusColor(status)),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      padding: EdgeInsets.zero,
                                     ),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    status,
-                                    style: GoogleFonts.notoSansLao(
-                                      textStyle: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                    onPressed: () {},
+                                    child: Text(
+                                      status,
+                                      style: GoogleFonts.notoSansLao(
+                                        textStyle: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),

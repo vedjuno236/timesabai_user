@@ -47,7 +47,7 @@ class SettingItem extends StatelessWidget {
             title,
             style: GoogleFonts.notoSansLao(
               textStyle: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: titleColor, // Use titleColor here
               ),
@@ -56,12 +56,12 @@ class SettingItem extends StatelessWidget {
           const Spacer(),
           value != null
               ? Text(
-            value!,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
-            ),
-          )
+                  value!,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                )
               : const SizedBox(),
           const SizedBox(width: 20),
           ForwardButton(

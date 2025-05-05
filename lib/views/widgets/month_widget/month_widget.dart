@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../components/styles/size_config.dart';
@@ -94,13 +95,13 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
     final pager = _buildPager(theme.colorScheme, locale);
 
     final borderRadius =
-    MediaQuery.of(context).orientation == Orientation.portrait
-        ? const BorderRadius.only(
-        bottomLeft: Radius.circular(4.0),
-        bottomRight: Radius.circular(4.0))
-        : const BorderRadius.only(
-        topRight: Radius.circular(4.0),
-        bottomRight: Radius.circular(4.0));
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? const BorderRadius.only(
+                bottomLeft: Radius.circular(4.0),
+                bottomRight: Radius.circular(4.0))
+            : const BorderRadius.only(
+                topRight: Radius.circular(4.0),
+                bottomRight: Radius.circular(4.0));
 
     final content = Material(
       clipBehavior: Clip.antiAlias,
@@ -152,22 +153,30 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
       child: ButtonBar(
         children: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, null),
-            child: Text(localizations.cancelButtonLabel),
-          ),
+              onPressed: () => Navigator.pop(context, null),
+              child: Text(localizations.cancelButtonLabel,
+                  style: GoogleFonts.notoSansLao(
+                    textStyle: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))),
           // TextButton(
           //   onPressed: () => Navigator.pop(context, _selectedDate),
           //   child: Text(localizations.okButtonLabel),
           // ),
-          ElevatedButton(
-              onPressed: () => Navigator.pop(context, _selectedDate),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                elevation: 0.0,
+          TextButton(
+            onPressed: () => Navigator.pop(context, _selectedDate),
+            child: Text(
+              localizations.okButtonLabel,
+              style: GoogleFonts.notoSansLao(
+                textStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: Text(localizations.okButtonLabel)),
+            ),
+          ),
         ],
       ),
     );
@@ -175,12 +184,12 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
 
   Widget _buildHeader(ThemeData theme, String locale) {
     final borderRadius =
-    MediaQuery.of(context).orientation == Orientation.portrait
-        ? const BorderRadius.only(
-        topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
-        : const BorderRadius.only(
-        topLeft: Radius.circular(10.0),
-        bottomLeft: Radius.circular(10.0));
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? const BorderRadius.only(
+                topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
+            : const BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0));
 
     return Material(
       clipBehavior: Clip.antiAlias,
@@ -286,22 +295,21 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
               crossAxisCount: 4,
               children: _isYearSelection
                   ? List<int>.generate(12, (i) => page * 12 + i)
-                  .map(
-                    (year) => Padding(
-                  padding: const EdgeInsets.all(4.0),
-
-                ),
-              )
-                  .toList()
+                      .map(
+                        (year) => Padding(
+                          padding: const EdgeInsets.all(4.0),
+                        ),
+                      )
+                      .toList()
                   : List<int>.generate(12, (i) => i + 1)
-                  .map((month) => DateTime(page, month))
-                  .map(
-                    (date) => Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: _getMonthButton(date, colorScheme, locale),
-                ),
-              )
-                  .toList(),
+                      .map((month) => DateTime(page, month))
+                      .map(
+                        (date) => Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: _getMonthButton(date, colorScheme, locale),
+                        ),
+                      )
+                      .toList(),
             );
           }),
     );
@@ -313,8 +321,8 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
     final int? lastDateCompared = _lastDate.compareTo(date);
 
     VoidCallback? callback = (firstDateCompared == null ||
-        firstDateCompared <= 0) &&
-        (lastDateCompared == null || lastDateCompared >= 0)
+                firstDateCompared <= 0) &&
+            (lastDateCompared == null || lastDateCompared >= 0)
         ? () => setState(() => _selectedDate = DateTime(date.year, date.month))
         : null;
 
@@ -327,14 +335,21 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
         foregroundColor: isSelected
             ? colorScheme.onPrimary
             : date.month == DateTime.now().month &&
-            date.year == DateTime.now().year
-            ? colorScheme.primary
-            : colorScheme.onSurface.withOpacity(0.87),
+                    date.year == DateTime.now().year
+                ? colorScheme.primary
+                : colorScheme.onSurface.withOpacity(0.87),
         backgroundColor: isSelected ? Colors.blueAccent : null,
         shape: const StadiumBorder(),
       ),
-      child: Text(DateFormat.MMMM(locale).format(date)),
+      child: Text(
+        DateFormat.MMMM(locale).format(date),
+        style: GoogleFonts.notoSansLao(
+          textStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
-
 }

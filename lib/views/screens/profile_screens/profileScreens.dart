@@ -131,7 +131,7 @@ class _ProfileScreensState extends State<ProfileScreens> {
           backgroundColor: isDarkMode ? Colors.black : Colors.white,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -139,19 +139,23 @@ class _ProfileScreensState extends State<ProfileScreens> {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 40, // Adjust the size as needed
-                        backgroundImage: Employee.profileimage.isNotEmpty
-                            ? NetworkImage(Employee.profileimage)
-                            : const NetworkImage(
-                                'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                        onBackgroundImageError: (exception, stackTrace) =>
-                            const Icon(Icons.error),
-                        child: Employee.profileimage.isEmpty
-                            ? const Icon(Icons
-                                .person) // Placeholder icon if no image is provided
-                            : null,
+                        radius: 50,
+                        backgroundColor: Colors.blueAccent.withOpacity(0.4),
+                        child: CircleAvatar(
+                          radius: 45, // Adjust the size as needed
+                          backgroundImage: Employee.profileimage.isNotEmpty
+                              ? NetworkImage(Employee.profileimage)
+                              : const NetworkImage(
+                                  'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              const Icon(Icons.error),
+                          child: Employee.profileimage.isEmpty
+                              ? const Icon(Icons
+                                  .person) // Placeholder icon if no image is provided
+                              : null,
+                        ),
                       ),
-                      const SizedBox(width: 20),
+                      const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -306,7 +310,6 @@ class _ProfileScreensState extends State<ProfileScreens> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
 
-                      // 🔥 ลบ Token ออกจาก SharedPreferences
                       await prefs.remove('token');
                       Navigator.pushReplacement(
                         context,

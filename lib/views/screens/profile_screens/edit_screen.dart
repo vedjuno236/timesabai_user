@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -588,7 +589,6 @@ class _EditScreenState extends State<EditScreen> {
           'name': _txtNameController.text,
           'email': _txtEmailController.text,
           'phone': _txtPhoneController.text,
-          // 'qualification': _txtStyController.text,
           'dateOfBirth': _dateController.text,
           'departmentId': _selectedDepartment ?? '',
           'positionId': selectedPositionId ?? '',
@@ -604,7 +604,7 @@ class _EditScreenState extends State<EditScreen> {
           'career': _careerController.text,
           'status': _statusController.text,
           'agenciesId': selectedAgenciesId ?? '',
-          'qualification':selectedItem ?? ''
+          'qualification': selectedItem ?? ''
         };
         if (imageUrl != null) {
           updateData['profileImage'] = imageUrl;
@@ -615,7 +615,15 @@ class _EditScreenState extends State<EditScreen> {
             .doc(employeeId)
             .update(updateData);
         print("Employee updated successfully");
-
+        Fluttertoast.showToast(
+          msg: 'ບັນທືກສໍາເລັດ',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
         await getId();
         Navigator.push(
           context,
@@ -2100,9 +2108,15 @@ class _EditScreenState extends State<EditScreen> {
                                 ),
                               ),
                               child: isLoading
-                                  ? const SpinKitCircle(
-                                      color: Colors.white,
-                                      size: 30.0,
+                                  ? Text(
+                                      'ກໍາລັງບັນທືກ....',
+                                      style: GoogleFonts.notoSansLao(
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     )
                                   : Text(
                                       'ບັນທືກ',

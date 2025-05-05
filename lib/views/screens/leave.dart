@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:timesabai/components/model/user_model/user_model.dart';
 import 'package:timesabai/views/screens/history_leave.dart';
+import 'package:timesabai/views/widgets/loading_platform/loading_platform.dart';
 
 import '../../../components/provider/bottom_provider/bottom_provider.dart';
 import 'package:timesabai/components/provider/bottom_provider/bottom_provider.dart'
@@ -23,6 +24,7 @@ class Laphak extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool isLoading = false;
     final viewType = ref.watch(bottom.viewTypeProvider);
     final tableViewIsActive = ref.watch(isTableViewActiveProvider);
     final heatmapDiagramIsActive = ref.watch(isHeatmapDiagramActiveProvider);
@@ -53,7 +55,7 @@ class Laphak extends ConsumerWidget {
           padding: const EdgeInsets.all(5.0),
           child: Column(
             children: [
-              SizedBox(height: 95),
+              const SizedBox(height: 95),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -77,7 +79,7 @@ class Laphak extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   InkWell(
                     onTap: () {
                       ref.read(viewTypeProvider.notifier).state =
@@ -311,7 +313,6 @@ class _DayScreensState extends State<DayScreens> {
           'type': 'ລາພັກແບບວັນ'
         });
 
-        // ✅ เรียก `showCupertinoDialog()` หลังจากบันทึกสำเร็จ
         if (!mounted) return; // ป้องกัน error ถ้า context ถูก dispose ไปแล้ว
         showCupertinoDialog(
           context: context,
@@ -325,11 +326,14 @@ class _DayScreensState extends State<DayScreens> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-    //                  Navigator.push(
-    // context,
-    // MaterialPageRoute(builder: (context) => const HistoryLeave()),
-  // );
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HistoryLeave(),
+                      ),
+                    ).whenComplete(() {
+                      Navigator.of(context).pop();
+                    });
                   },
                   child: Text('ຕົກລົງ',
                       style: GoogleFonts.notoSansLao(fontSize: 17)),
@@ -730,14 +734,14 @@ class _DayScreensState extends State<DayScreens> {
                 cursorColor: Colors.white,
                 controller: documentController,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
                   hintText: "ເຫດຜົນ",
                   hintStyle: GoogleFonts.notoSansLao(
                     textStyle: const TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                       color: Colors.black38,
                     ),
                   ),
@@ -889,9 +893,15 @@ class _DayScreensState extends State<DayScreens> {
               ),
             ),
             child: isLoading
-                ? const SpinKitCircle(
-                    color: Colors.white,
-                    size: 30.0,
+                ? Text(
+                    'ກໍາລັງສົ່ງຄໍາຂໍລາພັກ .....', // Fixed the placement of the text
+                    style: GoogleFonts.notoSansLao(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1674,9 +1684,15 @@ class _TimesScreensState extends State<TimesScreens> {
               ),
             ),
             child: isLoading
-                ? const SpinKitCircle(
-                    color: Colors.white,
-                    size: 30.0,
+                ? Text(
+                    'ກໍາລັງສົ່ງຄໍາຂໍລາພັກ .....', // Fixed the placement of the text
+                    style: GoogleFonts.notoSansLao(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -45,7 +45,7 @@ class SettingSwitch extends StatelessWidget {
             title,
             style: GoogleFonts.notoSansLao(
               textStyle: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: titleColor, // Apply titleColor here
               ),

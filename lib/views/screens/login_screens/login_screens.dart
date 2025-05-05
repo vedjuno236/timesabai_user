@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:timesabai/components/constants/strings.dart';
 import 'package:timesabai/views/screens/home_index.dart';
+import 'package:timesabai/views/widgets/loading_platform/loading_platform.dart';
 
 import '../../../components/model/user_model/user_model.dart';
 
@@ -28,8 +29,6 @@ class _LoginScreensState extends State<LoginScreens> {
   bool isLoading = false;
   bool isPasswordVisible = true;
   bool isChecked = false;
-
-
 
   // Future<void> login() async {
   //   if (_formKey.currentState?.validate() ?? false) {
@@ -78,7 +77,6 @@ class _LoginScreensState extends State<LoginScreens> {
   //   }
   // }
 
-
   Future<void> login() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
@@ -99,7 +97,6 @@ class _LoginScreensState extends State<LoginScreens> {
             maxWidth: 300,
           );
         } else if (password.isEmpty) {
-
           StatusAlert.show(
             context,
             title: 'Sign In Failed !!!',
@@ -133,25 +130,21 @@ class _LoginScreensState extends State<LoginScreens> {
               StatusAlert.show(
                 context,
                 duration: Duration(seconds: 2),
-
-                 subtitle: 'ເຂົ້າສູ່ລະບົບສໍາເລັດ.',
+                subtitle: 'ເຂົ້າສູ່ລະບົບສໍາເລັດ.',
                 subtitleOptions: StatusAlertTextConfiguration(
                   style: GoogleFonts.notoSansLao(
                     textStyle: const TextStyle(
-
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
-                    ),),
+                    ),
+                  ),
                 ),
                 configuration: IconConfiguration(icon: Icons.done),
                 maxWidth: 300,
               );
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeIndex())
-              );
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const HomeIndex()));
             } else {
-
               StatusAlert.show(
                 context,
                 title: 'ການເຂົ້າສູ່ລະບົບລົ້ມຫຼ້ຽວ ..',
@@ -159,18 +152,18 @@ class _LoginScreensState extends State<LoginScreens> {
                 titleOptions: StatusAlertTextConfiguration(
                   style: GoogleFonts.notoSansLao(
                     textStyle: const TextStyle(
-
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
-                    ),),
+                    ),
+                  ),
                 ),
                 subtitleOptions: StatusAlertTextConfiguration(
                   style: GoogleFonts.notoSansLao(
                     textStyle: const TextStyle(
-
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                    ),),
+                    ),
+                  ),
                 ),
                 backgroundColor: Colors.white,
                 configuration: const IconConfiguration(
@@ -189,18 +182,18 @@ class _LoginScreensState extends State<LoginScreens> {
               titleOptions: StatusAlertTextConfiguration(
                 style: GoogleFonts.notoSansLao(
                   textStyle: const TextStyle(
-
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
-                  ),),
+                  ),
+                ),
               ),
               subtitleOptions: StatusAlertTextConfiguration(
                 style: GoogleFonts.notoSansLao(
                   textStyle: const TextStyle(
-
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                  ),),
+                  ),
+                ),
               ),
               backgroundColor: Colors.white,
               configuration: const IconConfiguration(
@@ -229,256 +222,286 @@ class _LoginScreensState extends State<LoginScreens> {
     }
   }
 
-
-
-
-late SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
 
   @override
   Widget build(BuildContext context) {
-  return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
       child: Scaffold(
-        body: SizedBox(
-          width: double.infinity,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/svg/back.svg',
-                      fit: BoxFit.cover,
-                      height: 300,
-                      width: double.infinity,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
+        body: CustomProgressHUD(
+          key: UniqueKey(),
+          inAsyncCall: isLoading,
+          opacity: .7,
+          child: SizedBox(
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/svg/back.svg',
+                        fit: BoxFit.cover,
+                        height: 300,
+                        width: double.infinity,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            const Image(
+                              image: AssetImage('assets/images/images.png'),
+                            ),
+                            const SizedBox(height: 30),
+                            Text(
+                              'ມະຫາວິທະຍາໄລ ສຸພານຸວົງ',
+                              style: GoogleFonts.notoSansLao(
+                                textStyle: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              ' ຄະນະວິສະວະກໍາສາດ',
+                              style: GoogleFonts.notoSansLao(
+                                textStyle: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'ລະບົບກວດສອບເຂົ້າ-ອອກວຽກ \n ພະນັກງານ',
+                              style: GoogleFonts.notoSansLao(
+                                textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Form(
+                      key: _formKey,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 50),
-                          const Image(
-                            image: AssetImage('assets/images/images.png'),
-                          ),
-                          const SizedBox(height: 30),
-                          Text(
-                            'ລະບົບກວດສອບເຂົ້າ-ອອກວຽກ \n ພະນັກງານ',
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            cursorColor: Colors.purple,
+                            controller: _txtIDcontroller,
                             style: GoogleFonts.notoSansLao(
                               textStyle: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "ປ້ອນໄອດີ",
+                              hintStyle: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey.shade600,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black12),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.perm_identity,
                                 color: Colors.black38,
                               ),
                             ),
-                            textAlign: TextAlign.center,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter ID';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            style: GoogleFonts.notoSansLao(
+                              textStyle: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                            cursorColor: Colors.purple,
+                            controller: _txtPasswordcontroller,
+                            obscureText: isPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: "ປ້ອນລະຫັດຜ່ານ",
+                              hintStyle: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey.shade600,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black12),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.lock,
+                                color: Colors.black38,
+                              ),
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isPasswordVisible = !isPasswordVisible;
+                                  });
+                                },
+                                child: Icon(
+                                  isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter Password';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              GFCheckbox(
+                                size: 25,
+                                activeBgColor: Colors.red,
+                                type: GFCheckboxType.square,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isChecked = value;
+                                  });
+                                },
+                                value: isChecked,
+                                inactiveIcon: null,
+                              ),
+                              Center(
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'ຈື່ໄອດີ ແລະ ລະຫັດຂ້ອຍໄວ້',
+                                    style: GoogleFonts.notoSansLao(
+                                      textStyle: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black38,
+                                      ),
+                                    ),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Text(
+                                Strings.txtForget,
+                                style: GoogleFonts.notoSansLao(
+                                  textStyle: const TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          SizedBox(
+                            height: 60,
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: isLoading
+                                  ? null
+                                  : () async {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+
+                                        await Future.delayed(
+                                            const Duration(seconds: 1));
+
+                                        login();
+
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
+                                    },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: Colors.blueAccent,
+                                side: const BorderSide(color: Colors.white),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: isLoading
+                                  ? Text(
+                                      'ກໍາລັງເຂົ້າສູ່ລະບົບ.....',
+                                      style: GoogleFonts.notoSansLao(
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Text(
+                                      'ເຂົ້າສູ່ລະບົບ',
+                                      style: GoogleFonts.notoSansLao(
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    if (isLoading)
-                      const Positioned(
-                        bottom: 10,
-                        left: 175,
-                        child: Center(
-                          child: SpinKitCircle(
-                            color: Colors.blueAccent,
-                            size: 50,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          cursorColor: Colors.purple,
-                          controller: _txtIDcontroller,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "Enter your Id",
-                            hintStyle: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey.shade600,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.black12),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.black12),
-                            ),
-                            prefixIcon: const Icon(
-                              Icons.perm_identity,
-                              color: Colors.black38,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter ID';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          cursorColor: Colors.purple,
-                          controller: _txtPasswordcontroller,
-                          obscureText: isPasswordVisible,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "Enter your password",
-                            hintStyle: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey.shade600,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.black12),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.black12),
-                            ),
-                            prefixIcon: const Icon(
-                              Icons.lock,
-                              color: Colors.black38,
-                            ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isPasswordVisible = !isPasswordVisible;
-                                });
-                              },
-                              child: Icon(
-                                isPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter Password';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            GFCheckbox(
-                              size: 25,
-                              activeBgColor: Colors.red,
-                              type: GFCheckboxType.square,
-                              onChanged: (value) {
-                                setState(() {
-                                  isChecked = value;
-                                });
-                              },
-                              value: isChecked,
-                              inactiveIcon: null,
-                            ),
-                            Center(
-                              child: RichText(
-                                text: TextSpan(
-                                  text: 'ຈື່ໄອດີ ແລະ ລະຫັດຂ້ອຍໄວ້',
-                                  style: GoogleFonts.notoSansLao(
-                                    textStyle: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black38,
-                                    ),
-                                  ),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              Strings.txtForget,
-                              style: GoogleFonts.notoSansLao(
-                                textStyle: const TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        SizedBox(
-                          height: 60,
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            onPressed: isLoading
-                                ? null
-                                : () async {
-                                    if (_formKey.currentState?.validate() ?? false) {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-        
-                                      await Future.delayed(
-                                          const Duration(seconds: 1));
-        
-                                         login();
-        
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                    }
-                                  },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              side: const BorderSide(color: Colors.white),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: isLoading
-                                ? const SpinKitCircle(
-                                    color: Colors.white,
-                                    size: 30.0,
-                                  )
-                                : Text(
-                                    'ເຂົ້າສູ່ລະບົບ',
-                                    style: GoogleFonts.notoSansLao(
-                                      textStyle: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
