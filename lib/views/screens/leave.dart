@@ -863,8 +863,6 @@ class _DayScreensState extends State<DayScreens> {
                   ),
                 ),
               )
-        
-        
             ],
           ),
         ),
@@ -1093,21 +1091,20 @@ class _TimesScreensState extends State<TimesScreens> {
 
     Future<void> _saveTimeData() async {
       try {
-        String? imageUrl;
+        List<String> imageUrls = [];
         String? documentUrl;
 
-        // Check if an image is selected and upload it
-        if (_mages != null) {
+        if (_mages != null && _mages!.path.isNotEmpty) {
           String fileName = DateTime.now().millisecondsSinceEpoch.toString();
           Reference storageRef =
               FirebaseStorage.instance.ref().child('leave_images/$fileName');
           UploadTask uploadTask = storageRef.putFile(_mages!);
           TaskSnapshot snapshot = await uploadTask;
-          imageUrl = await snapshot.ref.getDownloadURL();
+          String imageUrl = await snapshot.ref.getDownloadURL();
+          imageUrls.add(imageUrl);
         } else {
-          imageUrl = "ບໍ່ມີຂໍ້ມູນ"; // No data
+          imageUrls = ["ບໍ່ມີຂໍ້ມູນ"];
         }
-
         // Check if a PDF is picked and upload it
         if (_pickedFile != null && _pickedFile!.files.isNotEmpty) {
           String fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -1149,7 +1146,7 @@ class _TimesScreensState extends State<TimesScreens> {
             'toDate': toTime,
 
             'daySummary': calculatedDuration,
-            'imageUrl': imageUrl, // Save the image URL
+            'imageUrl': imageUrls, // Save the image URL
             'documentUrl': documentUrl,
             'date': Timestamp.fromDate(DateTime.now()),
             'status': 'ລໍຖ້າອະນຸມັດ',
@@ -1157,11 +1154,35 @@ class _TimesScreensState extends State<TimesScreens> {
             'type': 'ລາພັກແບບຊົ່ວໂມງ'
           });
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Data saved successfully!")),
-          );
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HistoryLeave()));
+ if (!mounted) return; // ป้องกัน error ถ้า context ถูก dispose ไปแล้ว
+        showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Lottie.asset('assets/svg/successfully.json',
+                  width: 70, height: 70),
+              content: Text('ສົ່ງຂໍລາພັກສໍາເລັດ \nລໍຖ້າການອະນຸມັດ',
+                  style: GoogleFonts.notoSansLao(fontSize: 17)),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HistoryLeave(),
+                      ),
+                    ).whenComplete(() {
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  child: Text('ຕົກລົງ',
+                      style: GoogleFonts.notoSansLao(fontSize: 17)),
+                ),
+              ],
+            );
+          },
+        );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Employee not found!")),
