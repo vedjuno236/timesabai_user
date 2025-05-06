@@ -4,6 +4,9 @@ A new Flutter project.
 
 ## Getting Started
 
+ແອັບນີ້ສ້າງຊື້ນມາເພື່ອບົດຈົບເຈົ້າເດີ 🥰🐟
+------/----- ຮາຮາຮາາາາາາາາາາາາາ
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
