@@ -587,6 +587,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                                         .get();
 
                                                 if (snap.docs.isNotEmpty) {
+                                                  
                                                   DateTime now = DateTime.now();
                                                   String todayDate =
                                                       DateFormat('dd MMMM yyyy')
@@ -725,7 +726,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       clockInAM = currentTime;
                                                     });
                                                     await recordRef.set({
-                                                      'date': Timestamp.now(),
+                                                      'date':FieldValue.serverTimestamp(),
                                                       'clockInAM': currentTime,
                                                       'clockOutAM': "------",
                                                       'clockInPM': "------",
@@ -764,8 +765,8 @@ class _TodayScreensState extends State<TodayScreens> {
                                                           now.year,
                                                           now.month,
                                                           now.day,
-                                                          12,
-                                                          0),
+                                                          13,
+                                                          10),
                                                     );
                                                     logger.d(
                                                         'Recording clockInPM at $currentTime');
@@ -773,7 +774,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       clockInPM = currentTime;
                                                     });
                                                     await recordRef.set({
-                                                      'date': Timestamp.now(),
+                                                      'date':FieldValue.serverTimestamp(),
                                                       'clockInAM': clockInAM,
                                                       'clockOutAM': clockOutAM,
                                                       'clockInPM': currentTime,
@@ -859,6 +860,8 @@ class _TodayScreensState extends State<TodayScreens> {
 
                                               key.currentState?.reset();
                                             },
+                                       
+                                       
                                           );
                                         },
                                       ),

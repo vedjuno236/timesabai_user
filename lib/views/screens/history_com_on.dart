@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_month_year_picker/simple_month_year_picker.dart';
+import 'package:timesabai/views/widgets/date_month_year/shared/month_picker.dart';
 
 import '../../components/model/user_model/user_model.dart';
 import '../widgets/month_widget/month_widget.dart';
@@ -78,19 +79,119 @@ class _HistoryState extends State<History> {
             padding: const EdgeInsets.only(right: 10.0),
             child: GestureDetector(
               onTap: () async {
-                final pickedDate = await showMonthPicker(
-                  context: context,
-                  initialDate: selectedDate ?? DateTime.now(),
-                  firstDate: DateTime(2024),
-                  lastDate: DateTime(2050),
-                );
+                //   final pickedDate = await showMonthPicker(
+                //     context: context,
+                //     initialDate: selectedDate ?? DateTime.now(),
+                //     firstDate: DateTime(2024),
+                //     lastDate: DateTime(2050),
+                //   );
 
-                if (pickedDate != null) {
-                  setState(() {
-                    selectedDate = pickedDate;
-                    _month = DateFormat.yMMMM('lo').format(pickedDate).trim();
-                  });
-                }
+                //   if (pickedDate != null) {
+                //     setState(() {
+                //       selectedDate = pickedDate;
+                //       _month = DateFormat.yMMMM('lo').format(pickedDate).trim();
+                //     });
+                //   }
+                // },
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    DateTime now = DateTime.now();
+                    DateTime maxDate = DateTime(now.year, now.month + 1, 0);
+                    DateTime? tempSelectedMonth = selectedDate;
+                    return AlertDialog(
+                      elevation: 2,
+                      shadowColor: Colors.blue,
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      content: SizedBox(
+                        height: 300,
+                        width: 450,
+                        child: MonthPicker(
+                          selectedCellDecoration: const BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
+                          ),
+                          selectedCellTextStyle: GoogleFonts.notoSansLao(
+                            fontSize: 14,
+                          ),
+                          enabledCellsTextStyle: GoogleFonts.notoSansLao(
+                            fontSize: 14,
+                          ),
+                          disabledCellsTextStyle: GoogleFonts.notoSansLao(
+                              fontSize: 14, color: Colors.grey),
+                          currentDateTextStyle: GoogleFonts.notoSansLao(
+                            fontSize: 14,
+                          ),
+                          currentDateDecoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.black,
+                            ),
+                          ),
+                          splashColor: Colors.blue,
+                          slidersColor: Colors.black,
+                          centerLeadingDate: true,
+                          minDate: DateTime(2000),
+                          currentDate: selectedDate ?? DateTime.now(),
+                          selectedDate: selectedDate ?? DateTime.now(),
+                          onDateSelected: (month) {
+                            setState(() {
+                              tempSelectedMonth = month;
+                            });
+                          },
+                          maxDate: maxDate,
+                        ),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: Colors.grey,
+                            ),
+                            child: Text('ຍົກເລີກ',
+                                style: GoogleFonts.notoSansLao(
+                                  textStyle: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
+                                ))),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: Colors.blue,
+                          ),
+                          onPressed: () {
+                            if (tempSelectedMonth != null &&
+                                tempSelectedMonth != selectedDate) {
+                              setState(() {
+                                selectedDate = tempSelectedMonth!;
+                                // _month = DateFormat('MMMM')
+                                //     .format(selectedDate!);
+                                _month = DateFormat.yMMMM('lo')
+                                    .format(selectedDate!);
+                              });
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'ຕົກລົງ',
+                            style: GoogleFonts.notoSansLao(
+                              textStyle: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                );
               },
               child: Container(
                 padding:
