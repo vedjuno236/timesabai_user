@@ -244,16 +244,29 @@ class _HistoryState extends State<History> {
                           selectedDate!, currentDate)
                       : [];
 
+                  // Map<String, QueryDocumentSnapshot> recordsMap = {};
+                  // if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                  //   for (var record in snapshot.data!.docs) {
+                  //     DateTime recordDate = record['date'].toDate();
+                  //     String dateKey =
+                  //         DateFormat('yyyy-MM-dd').format(recordDate);
+                  //     recordsMap[dateKey] = record;
+                  //   }
+                  // }
                   Map<String, QueryDocumentSnapshot> recordsMap = {};
                   if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     for (var record in snapshot.data!.docs) {
-                      DateTime recordDate = record['date'].toDate();
-                      String dateKey =
-                          DateFormat('yyyy-MM-dd').format(recordDate);
-                      recordsMap[dateKey] = record;
+                      if (record['date'] != null) {
+                        DateTime recordDate = record['date'].toDate();
+                        String dateKey =
+                            DateFormat('yyyy-MM-dd').format(recordDate);
+                        recordsMap[dateKey] = record;
+                      } else {
+                        print(
+                            'Warning: Record with ID ${record.id} has a null date.');
+                      }
                     }
                   }
-
                   return ListView.builder(
                     itemCount: daysInRange.length,
                     itemBuilder: (context, index) {
