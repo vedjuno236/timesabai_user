@@ -91,6 +91,25 @@ class ImageLoadingPlatformNoPadding extends StatelessWidget {
 
 
 
+class LoadingPlatformV1 extends StatelessWidget {
+  final Color? color;
+
+  const LoadingPlatformV1({
+    Key? key,
+    this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SpinKitChasingDots(
+      color: color ?? Colors.white,
+      size: 40,
+    );
+  }
+}
+
+
+
 
 
 

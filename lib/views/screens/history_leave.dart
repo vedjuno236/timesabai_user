@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,19 +29,19 @@ class HistoryLeave extends ConsumerWidget {
     final pageSection = viewType == ViewType.wait
         ? const Wait()
         : viewType == ViewType.approved
-        ? const Approved()
-        : const Refused();
+            ? const Approved()
+            : const Refused();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor:   Color(0xFF577DF4),
+        backgroundColor: Color(0xFF577DF4),
         title: Text(
           'ປະຫັວດລາພັກ',
           style: GoogleFonts.notoSansLao(
             textStyle: const TextStyle(
-              fontSize:15,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -54,9 +55,7 @@ class HistoryLeave extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
-
               children: [
-
                 const SizedBox(height: 70),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,7 +82,8 @@ class HistoryLeave extends ConsumerWidget {
                     const SizedBox(width: 10),
                     InkWell(
                       onTap: () {
-                        ref.read(viewProvider.notifier).state = ViewType.approved;
+                        ref.read(viewProvider.notifier).state =
+                            ViewType.approved;
                         ref.read(isWaitProvider.notifier).state = false;
                         ref.read(isApprovedProvider.notifier).state = true;
                         ref.read(isRefusedProvider.notifier).state = false;
@@ -103,7 +103,8 @@ class HistoryLeave extends ConsumerWidget {
                     const SizedBox(width: 10),
                     InkWell(
                       onTap: () {
-                        ref.read(viewProvider.notifier).state = ViewType.refused;
+                        ref.read(viewProvider.notifier).state =
+                            ViewType.refused;
                         ref.read(isWaitProvider.notifier).state = false;
                         ref.read(isApprovedProvider.notifier).state = false;
                         ref.read(isRefusedProvider.notifier).state = true;
@@ -122,11 +123,12 @@ class HistoryLeave extends ConsumerWidget {
                     ),
                   ],
                 ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: pageSection),
+                Padding(padding: const EdgeInsets.all(8.0), child: pageSection),
               ],
-            ),
+            ).animate().fadeIn(duration: 400.ms, delay: 400.ms).move(
+                  begin: const Offset(-16, 0),
+                  curve: Curves.easeOutQuad,
+                ),
           ),
         ),
       ),
@@ -153,10 +155,11 @@ class ViewTypeButton extends ConsumerWidget {
       width: 110,
       child: OutlinedButton(
         onPressed: () {
-          ref.read(viewProvider.notifier).state =
-          title == "ລໍຖ້າອະນຸມັດ" ? ViewType.wait :
-          title == "ອະນຸມັດແລ້ວ" ? ViewType.approved :
-          ViewType.refused;
+          ref.read(viewProvider.notifier).state = title == "ລໍຖ້າອະນຸມັດ"
+              ? ViewType.wait
+              : title == "ອະນຸມັດແລ້ວ"
+                  ? ViewType.approved
+                  : ViewType.refused;
 
           ref.read(isWaitProvider.notifier).state = title == "ລໍຖ້າອະນຸມັດ";
           ref.read(isApprovedProvider.notifier).state = title == "ອະນຸມັດແລ້ວ";
@@ -182,9 +185,6 @@ class ViewTypeButton extends ConsumerWidget {
   }
 }
 
-
-
-
 class Wait extends StatefulWidget {
   const Wait({super.key});
 
@@ -196,10 +196,12 @@ class _WaitState extends State<Wait> {
   @override
   Widget build(BuildContext context) {
     if (Employee.id == null || Employee.id!.isEmpty) {
-      return const Center(child:SpinKitCircle(
-        color: Colors.blue,
-        size: 40.0,
-      ),);
+      return const Center(
+        child: SpinKitCircle(
+          color: Colors.blue,
+          size: 40.0,
+        ),
+      );
     }
 
     return StreamBuilder<QuerySnapshot>(
@@ -207,7 +209,8 @@ class _WaitState extends State<Wait> {
           .collection("Employee")
           .doc(Employee.id) // Make sure Employee.id is valid
           .collection("Leave")
-          .where('status', isEqualTo: 'ລໍຖ້າອະນຸມັດ') // Filter for only "Pending" status
+          .where('status',
+              isEqualTo: 'ລໍຖ້າອະນຸມັດ') // Filter for only "Pending" status
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Check for errors
@@ -224,11 +227,10 @@ class _WaitState extends State<Wait> {
           // Reverse the list of documents
           final snap = snapshot.data!.docs.reversed.toList();
 
-
           return Container(
             height: MediaQuery.of(context).size.height - 200,
             child: ListView.separated(
-               padding: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               itemCount: snap.length,
               itemBuilder: (context, index) {
                 final doc = snap[index];
@@ -237,21 +239,21 @@ class _WaitState extends State<Wait> {
                 DateTime toDate = (data['toDate'] as Timestamp).toDate();
 
                 // Format the dates
-                String formattedFromDate = DateFormat('dd MMMM yyyy ').format(fromDate);
-                String formattedToDate = DateFormat('dd MMMM yyyy ').format(toDate);
+                String formattedFromDate =
+                    DateFormat('dd MMMM yyyy ').format(fromDate);
+                String formattedToDate =
+                    DateFormat('dd MMMM yyyy ').format(toDate);
                 String formattedFromTime = DateFormat('hh:mm').format(fromDate);
                 String formattedToTime = DateFormat(' hh:mm').format(toDate);
-
-
 
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context)=> EditLeave(documentId: doc.id)
-                        // builder: (context) => EditLeave(documentId: doc.id),
-                      ),
+                          builder: (context) => EditLeave(documentId: doc.id)
+                          // builder: (context) => EditLeave(documentId: doc.id),
+                          ),
                     );
                   },
                   child: Column(
@@ -312,30 +314,30 @@ class _WaitState extends State<Wait> {
                             ),
                           ],
                         ),
-
                       ),
                       SizedBox(height: 5),
-                  RichText(
-                  text: TextSpan(
-                  text: 'ເວລາ:    ',
-                  style: GoogleFonts.notoSansLao(
-                  textStyle: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.black,
-                  ),
-                  ),
-                  children: [
-                  TextSpan(
-                  text: "  $formattedFromTime - $formattedToTime",
-                  style: GoogleFonts.notoSansLao(
-                  textStyle: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.blue,
-                  ),
-                  ),
-                  ),
-                  ],
-                  ),),
+                      RichText(
+                        text: TextSpan(
+                          text: 'ເວລາ:    ',
+                          style: GoogleFonts.notoSansLao(
+                            textStyle: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          ),
+                          children: [
+                            TextSpan(
+                              text: "  $formattedFromTime - $formattedToTime",
+                              style: GoogleFonts.notoSansLao(
+                                textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 5),
                       RichText(
                         text: TextSpan(
@@ -388,25 +390,27 @@ class _WaitState extends State<Wait> {
               },
               separatorBuilder: (context, index) => Divider(),
             ),
-          );
+          ).animate().fadeIn(duration: 400.ms, delay: 400.ms).move(
+                begin: const Offset(-16, 0),
+                curve: Curves.easeOutQuad,
+              );
         } else {
-          return Center(child: Text("ຍັງບໍ່ທັນມີຂໍ້ມູນ.",style: GoogleFonts.notoSansLao(
-            textStyle: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
+          return Center(
+            child: Text(
+              "ຍັງບໍ່ທັນມີຂໍ້ມູນ.",
+              style: GoogleFonts.notoSansLao(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
             ),
-          ),
-          ),
           );
         }
       },
     );
   }
 }
-
-
-
-
 
 class Approved extends StatefulWidget {
   const Approved({super.key});
@@ -416,7 +420,6 @@ class Approved extends StatefulWidget {
 }
 
 class _ApprovedState extends State<Approved> {
-
   @override
   Widget build(BuildContext context) {
     // return FutureBuilder<List<LeaveModel>>(
@@ -549,7 +552,6 @@ class _ApprovedState extends State<Approved> {
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
           final snap = snapshot.data!.docs;
 
-
           return Container(
             height: MediaQuery.of(context).size.height - 200,
             child: ListView.separated(
@@ -560,13 +562,12 @@ class _ApprovedState extends State<Approved> {
                 DateTime fromDate = (data['fromDate'] as Timestamp).toDate();
                 DateTime toDate = (data['toDate'] as Timestamp).toDate();
 
-                String formattedFromDate = DateFormat('dd MMMM yyyy ').format(fromDate);
-                String formattedToDate = DateFormat('dd MMMM yyyy ').format(toDate);
+                String formattedFromDate =
+                    DateFormat('dd MMMM yyyy ').format(fromDate);
+                String formattedToDate =
+                    DateFormat('dd MMMM yyyy ').format(toDate);
                 String formattedFromTime = DateFormat('hh:mm').format(fromDate);
                 String formattedToTime = DateFormat(' hh:mm').format(toDate);
-
-
-
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -605,7 +606,6 @@ class _ApprovedState extends State<Approved> {
                       ),
                     ),
                     const SizedBox(height: 5),
-
                     RichText(
                       text: TextSpan(
                         text: 'ເວລາ:    ',
@@ -674,8 +674,6 @@ class _ApprovedState extends State<Approved> {
                         ],
                       ),
                     ),
-
-
                   ],
                 );
               },
@@ -683,13 +681,16 @@ class _ApprovedState extends State<Approved> {
             ),
           );
         } else {
-          return Center(child: Text("ຍັງບໍ່ທັນມີຂໍ້ມູນ.",style: GoogleFonts.notoSansLao(
-            textStyle: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
+          return Center(
+            child: Text(
+              "ຍັງບໍ່ທັນມີຂໍ້ມູນ.",
+              style: GoogleFonts.notoSansLao(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
             ),
-          ),
-          ),
           );
         }
       },
@@ -712,7 +713,8 @@ class _RefusedState extends State<Refused> {
           .collection("Employee")
           .doc(Employee.id) // Use the passed employee ID
           .collection("Leave")
-          .where('status', isEqualTo: 'ປະຕິເສດ') // Filter for only "Approved" status
+          .where('status',
+              isEqualTo: 'ປະຕິເສດ') // Filter for only "Approved" status
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         // Check for errors
@@ -739,13 +741,12 @@ class _RefusedState extends State<Refused> {
                 DateTime toDate = (data['toDate'] as Timestamp).toDate();
 
                 // Format the dates
-                String formattedFromDate = DateFormat('dd MMMM yyyy').format(fromDate);
-                String formattedToDate = DateFormat('dd MMMM yyyy').format(toDate);
+                String formattedFromDate =
+                    DateFormat('dd MMMM yyyy').format(fromDate);
+                String formattedToDate =
+                    DateFormat('dd MMMM yyyy').format(toDate);
                 String formattedFromTime = DateFormat('hh:mm').format(fromDate);
                 String formattedToTime = DateFormat(' hh:mm').format(toDate);
-
-
-
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -852,21 +853,26 @@ class _RefusedState extends State<Refused> {
                         ],
                       ),
                     ),
-
                   ],
                 );
               },
               separatorBuilder: (context, index) => Divider(),
             ),
-          );
+          ).animate().fadeIn(duration: 400.ms, delay: 400.ms).move(
+                begin: const Offset(-16, 0),
+                curve: Curves.easeOutQuad,
+              );
         } else {
-          return Center(child: Text("ຍັງບໍ່ທັນມີຂໍ້ມູນ.",style: GoogleFonts.notoSansLao(
-            textStyle: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
+          return Center(
+            child: Text(
+              "ຍັງບໍ່ທັນມີຂໍ້ມູນ.",
+              style: GoogleFonts.notoSansLao(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
             ),
-          ),
-          ),
           );
         }
       },

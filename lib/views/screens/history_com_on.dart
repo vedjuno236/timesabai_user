@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_month_year_picker/simple_month_year_picker.dart';
@@ -445,7 +446,10 @@ class _HistoryState extends State<History> {
                             ),
                           ],
                         ),
-                      );
+                      ).animate().fadeIn(duration: 400.ms, delay: 400.ms).move(
+                            begin: const Offset(-16, 0),
+                            curve: Curves.easeOutQuad,
+                          );
                     },
                   );
                 },

@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -190,8 +191,7 @@ class _DayScreensState extends State<DayScreens> {
   List<Map<String, dynamic>> _leaveType = [];
   String? leaveTypeId;
   String? selectedLeaveType;
-  // String? leaveTpe;
-  // List<String> leaveTpeItems = ['ລາພັກປະຈໍາປີ', 'ລາພັກປ່ວຍ'];
+
   List<File> _mages = [];
   FilePickerResult? _pickedFile;
 
@@ -497,7 +497,12 @@ class _DayScreensState extends State<DayScreens> {
             iconSize: 24,
             underline: const SizedBox(),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -588,7 +593,12 @@ class _DayScreensState extends State<DayScreens> {
                   ],
                 ),
               ),
-            ),
+            ).animate().scaleXY(
+                begin: 0,
+                end: 1,
+                delay: 300.ms,
+                duration: 300.ms,
+                curve: Curves.easeInOutCubic),
             const SizedBox(width: 10), // Space between the two fields
             Expanded(
               child: GestureDetector(
@@ -678,7 +688,12 @@ class _DayScreensState extends State<DayScreens> {
                   ],
                 ),
               ),
-            ),
+            ).animate().scaleXY(
+                begin: 0,
+                end: 1,
+                delay: 300.ms,
+                duration: 300.ms,
+                curve: Curves.easeInOutCubic),
           ],
         ),
         const SizedBox(height: 10),
@@ -710,7 +725,12 @@ class _DayScreensState extends State<DayScreens> {
               borderSide: const BorderSide(color: Colors.black12),
             ),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
         SizedBox(height: 10),
         Row(
           children: [
@@ -725,7 +745,12 @@ class _DayScreensState extends State<DayScreens> {
               ),
             ),
           ],
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: Column(
@@ -865,7 +890,12 @@ class _DayScreensState extends State<DayScreens> {
               )
             ],
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
         SizedBox(height: 20),
         SizedBox(
           height: 60,
@@ -924,7 +954,12 @@ class _DayScreensState extends State<DayScreens> {
                     ],
                   ),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
       ],
     );
   }
@@ -1154,35 +1189,35 @@ class _TimesScreensState extends State<TimesScreens> {
             'type': 'ລາພັກແບບຊົ່ວໂມງ'
           });
 
- if (!mounted) return; // ป้องกัน error ถ้า context ถูก dispose ไปแล้ว
-        showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Lottie.asset('assets/svg/successfully.json',
-                  width: 70, height: 70),
-              content: Text('ສົ່ງຂໍລາພັກສໍາເລັດ \nລໍຖ້າການອະນຸມັດ',
-                  style: GoogleFonts.notoSansLao(fontSize: 17)),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HistoryLeave(),
-                      ),
-                    ).whenComplete(() {
+          if (!mounted) return; // ป้องกัน error ถ้า context ถูก dispose ไปแล้ว
+          showCupertinoDialog(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Lottie.asset('assets/svg/successfully.json',
+                    width: 70, height: 70),
+                content: Text('ສົ່ງຂໍລາພັກສໍາເລັດ \nລໍຖ້າການອະນຸມັດ',
+                    style: GoogleFonts.notoSansLao(fontSize: 17)),
+                actions: [
+                  TextButton(
+                    onPressed: () {
                       Navigator.of(context).pop();
-                    });
-                  },
-                  child: Text('ຕົກລົງ',
-                      style: GoogleFonts.notoSansLao(fontSize: 17)),
-                ),
-              ],
-            );
-          },
-        );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HistoryLeave(),
+                        ),
+                      ).whenComplete(() {
+                        Navigator.of(context).pop();
+                      });
+                    },
+                    child: Text('ຕົກລົງ',
+                        style: GoogleFonts.notoSansLao(fontSize: 17)),
+                  ),
+                ],
+              );
+            },
+          );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Employee not found!")),
@@ -1239,7 +1274,7 @@ class _TimesScreensState extends State<TimesScreens> {
             underline: const SizedBox(),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         // Date Picker
         GestureDetector(
           onTap: () {

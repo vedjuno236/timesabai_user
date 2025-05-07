@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ import 'package:timesabai/components/model/agencies_model.dart';
 import 'package:timesabai/components/model/provinces_model.dart';
 import 'package:timesabai/views/screens/home_index.dart';
 import 'package:timesabai/views/screens/profile_screens/profileScreens.dart';
+import 'package:timesabai/views/widgets/loading_platform/loading_platform.dart';
 import '../../../components/model/departmant_model/departmant_model.dart';
 import '../../../components/model/ethnicity_model.dart';
 import '../../../components/model/position_model/position_model.dart';
@@ -696,17 +698,20 @@ class _EditScreenState extends State<EditScreen> {
                                         width: 100,
                                         height: 100,
                                         fit: BoxFit.cover,
-                                        progressIndicatorBuilder: (context, url,
-                                                downloadProgress) =>
-                                            CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                const LoadingPlatformV1(),
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),
                                       ),
                               ),
                             ),
-                          ),
+                          ).animate().scaleXY(
+                              begin: 0,
+                              end: 1,
+                              delay: 300.ms,
+                              duration: 300.ms,
+                              curve: Curves.easeInOutCubic),
                           Positioned(
                             bottom: 3,
                             left: 200,

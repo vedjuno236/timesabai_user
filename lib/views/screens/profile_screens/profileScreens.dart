@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
@@ -191,7 +192,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                         },
                       ),
                     ],
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                   const SizedBox(height: 40),
                   Text(
                     "ການຕັ້ງຄ່າ",
@@ -202,7 +208,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                         color: isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                   const SizedBox(height: 20),
                   SettingItem(
                     title: "ພາສາ",
@@ -261,7 +272,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                       );
                     },
                     titleColor: isDarkMode ? Colors.white : Colors.black,
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                   const SizedBox(height: 20),
                   SettingItem(
                     title: "ຂ່າວສານຕ່າງ ແລະ ແຈ້ງການ",
@@ -277,7 +293,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                         ),
                       );
                     },
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                   const SizedBox(height: 20),
                   SettingItem(
                     title: "ການແຈ້ງເຕືອນ",
@@ -286,7 +307,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                     iconColor: Colors.blue,
                     titleColor: isDarkMode ? Colors.white : Colors.black,
                     onTap: () {},
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                   const SizedBox(height: 20),
                   SettingSwitch(
                     title: "Dark Mode",
@@ -298,7 +324,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                     onTap: (value) {
                       ref.read(isDarkProvider.notifier).state = value;
                     },
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                   const SizedBox(height: 20),
                   SettingItem(
                     title: "ອອກຈາກລະບົບ",
@@ -317,7 +348,12 @@ class _ProfileScreensState extends State<ProfileScreens> {
                             builder: (context) => const LoginScreens()),
                       );
                     },
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 500.ms,
+                      duration: 500.ms,
+                      curve: Curves.easeInOutCubic),
                 ],
               ),
             ),
