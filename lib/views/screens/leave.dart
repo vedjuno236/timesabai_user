@@ -1273,7 +1273,12 @@ class _TimesScreensState extends State<TimesScreens> {
             iconSize: 24,
             underline: const SizedBox(),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
         const SizedBox(height: 20),
         // Date Picker
         GestureDetector(
@@ -1344,9 +1349,19 @@ class _TimesScreensState extends State<TimesScreens> {
                   borderSide: const BorderSide(color: Colors.black12),
                 ),
               ),
-            ),
+            ).animate().scaleXY(
+                begin: 0,
+                end: 1,
+                delay: 300.ms,
+                duration: 300.ms,
+                curve: Curves.easeInOutCubic),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
         SizedBox(height: 10),
         // Start Time Picker
         Row(
@@ -1441,7 +1456,12 @@ class _TimesScreensState extends State<TimesScreens> {
                   ],
                 ),
               ),
-            ),
+            ).animate().scaleXY(
+                begin: 0,
+                end: 1,
+                delay: 300.ms,
+                duration: 300.ms,
+                curve: Curves.easeInOutCubic),
             SizedBox(width: 10),
             Expanded(
               child: GestureDetector(
@@ -1534,7 +1554,12 @@ class _TimesScreensState extends State<TimesScreens> {
                   ],
                 ),
               ),
-            ),
+            ).animate().scaleXY(
+                begin: 0,
+                end: 1,
+                delay: 300.ms,
+                duration: 300.ms,
+                curve: Curves.easeInOutCubic),
           ],
         ),
         SizedBox(height: 10),
@@ -1563,7 +1588,12 @@ class _TimesScreensState extends State<TimesScreens> {
               borderSide: const BorderSide(color: Colors.black12),
             ),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
 
         SizedBox(height: 20),
         Row(
@@ -1579,7 +1609,12 @@ class _TimesScreensState extends State<TimesScreens> {
               ),
             ),
           ],
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
 
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -1713,7 +1748,12 @@ class _TimesScreensState extends State<TimesScreens> {
               )
             ],
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
 
         SizedBox(height: 20),
         SizedBox(
@@ -1773,7 +1813,12 @@ class _TimesScreensState extends State<TimesScreens> {
                     ],
                   ),
           ),
-        ),
+        ).animate().scaleXY(
+            begin: 0,
+            end: 1,
+            delay: 300.ms,
+            duration: 300.ms,
+            curve: Curves.easeInOutCubic),
       ],
     );
   }

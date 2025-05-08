@@ -19,6 +19,7 @@ import 'package:timesabai/components/services/weather_service.dart';
 import 'package:timesabai/main.dart';
 import 'package:timesabai/wearth.dart';
 import '../../components/model/user_model/user_model.dart';
+import 'package:lottie/lottie.dart' as lottie;
 
 class TodayScreens extends StatefulWidget {
   const TodayScreens({super.key});
@@ -248,11 +249,66 @@ class _TodayScreensState extends State<TodayScreens> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  // Stack(
+                                  //   children: [
+                                  //     // CircleAvatar(
+                                  //     //   radius: 45,
+                                  //     //   backgroundColor: Colors.white,
+                                  //     //   child: CircleAvatar(
+                                  //     //     radius: 40,
+                                  //     //     backgroundImage: Employee
+                                  //     //             .profileimage.isNotEmpty
+                                  //     //         ? NetworkImage(
+                                  //     //             Employee.profileimage)
+                                  //     //         : const NetworkImage(
+                                  //     //             'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                                  //     //     onBackgroundImageError:
+                                  //     //         (exception, stackTrace) =>
+                                  //     //             const Icon(Icons.error),
+                                  //     //     child: Employee.profileimage.isEmpty
+                                  //     //         ? const Icon(Icons.person)
+                                  //     //         : null,
+                                  //     //   ),
+                                  //     // ).animate().scaleXY(
+                                  //     //     begin: 0,
+                                  //     //     end: 1,
+                                  //     //     delay: 300.ms,
+                                  //     //     duration: 300.ms,
+                                  //     //     curve: Curves.easeInOutCubic),
+
+                                  //     lottie.Lottie.asset(
+                                  //         'assets/svg/animation.json',
+                                  //         width: 70,
+                                  //         height: 70),
+                                  //              CircleAvatar(
+                                  //         radius: 40,
+                                  //         backgroundImage: Employee
+                                  //                 .profileimage.isNotEmpty
+                                  //             ? NetworkImage(
+                                  //                 Employee.profileimage)
+                                  //             : const NetworkImage(
+                                  //                 'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                                  //         onBackgroundImageError:
+                                  //             (exception, stackTrace) =>
+                                  //                 const Icon(Icons.error),
+                                  //         child: Employee.profileimage.isEmpty
+                                  //             ? const Icon(Icons.person)
+                                  //             : null,
+                                  //       ),
+                                  //   ],
+                                  // ),
                                   Stack(
+                                    alignment: Alignment.center,
                                     children: [
+                                      lottie.Lottie.asset(
+                                        'assets/svg/animation.json',
+                                        width: 165,
+                                        height: 165,
+                                      ),
                                       CircleAvatar(
                                         radius: 45,
-                                        backgroundColor: Colors.white,
+                                        backgroundColor:
+                                            Colors.white.withOpacity(0.4),
                                         child: CircleAvatar(
                                           radius: 40,
                                           backgroundImage: Employee
@@ -268,12 +324,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                               ? const Icon(Icons.person)
                                               : null,
                                         ),
-                                      ).animate().scaleXY(
-                                          begin: 0,
-                                          end: 1,
-                                          delay: 300.ms,
-                                          duration: 300.ms,
-                                          curve: Curves.easeInOutCubic),
+                                      ),
                                     ],
                                   ),
                                   Column(
@@ -328,7 +379,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                       curve: Curves.easeInOutCubic),
                                 ],
                               ),
-                              const SizedBox(height: 30),
+                              const SizedBox(height: 10),
                               Row(
                                 children: [
                                   Expanded(

@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../components/model/departmant_model/departmant_model.dart';
 import '../../../components/model/position_model/position_model.dart';
@@ -132,48 +133,58 @@ class _ProfileScreensState extends State<ProfileScreens> {
           backgroundColor: isDarkMode ? Colors.black : Colors.white,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 80),
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.blueAccent.withOpacity(0.4),
-                        child: CircleAvatar(
-                          radius: 45, // Adjust the size as needed
-                          backgroundImage: Employee.profileimage.isNotEmpty
-                              ? NetworkImage(Employee.profileimage)
-                              : const NetworkImage(
-                                  'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                          onBackgroundImageError: (exception, stackTrace) =>
-                              const Icon(Icons.error),
-                          child: Employee.profileimage.isEmpty
-                              ? const Icon(Icons
-                                  .person) // Placeholder icon if no image is provided
-                              : null,
-                        ),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/svg/profile.json',
+                            width: 150,
+                            height: 150,
+                          ),
+                          CircleAvatar(
+                            radius: 45,
+                            backgroundColor: Colors.white.withOpacity(0.4),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: Employee.profileimage.isNotEmpty
+                                  ? NetworkImage(Employee.profileimage)
+                                  : const NetworkImage(
+                                      'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                              onBackgroundImageError: (exception, stackTrace) =>
+                                  const Icon(Icons.error),
+                              child: Employee.profileimage.isEmpty
+                                  ? const Icon(Icons.person)
+                                  : null,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 5),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             Employee.employeeId,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 15,
                               fontWeight: FontWeight.w500,
                               color: isDarkMode ? Colors.white : Colors.black,
                             ),
                           ),
+                          const SizedBox(height: 5),
                           Text(
                             Employee.firstName,
                             style: GoogleFonts.notoSansLao(
                               textStyle: TextStyle(
                                 color: isDarkMode ? Colors.white : Colors.black,
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -203,7 +214,7 @@ class _ProfileScreensState extends State<ProfileScreens> {
                     "ການຕັ້ງຄ່າ",
                     style: GoogleFonts.notoSansLao(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: isDarkMode ? Colors.white : Colors.black,
                       ),

@@ -220,7 +220,12 @@ class _WaitState extends State<Wait> {
 
         // Check if the snapshot has data
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(
+            child: SpinKitCircle(
+              color: Colors.blue,
+              size: 40.0,
+            ),
+          );
         }
 
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
@@ -546,7 +551,12 @@ class _ApprovedState extends State<Approved> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(
+            child: SpinKitCircle(
+              color: Colors.blue,
+              size: 40.0,
+            ),
+          );
         }
 
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
