@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timesabai/components/styles/size_config.dart';
@@ -167,7 +166,7 @@ class AppTheme {
             .buttonTheme
             .copyWith(colorScheme: const ColorScheme.light()),
         appBarTheme: const AppBarTheme(
-          color: Colors.white,
+          color: Color(0xFF577DF4),
           centerTitle: true,
           elevation: 0.0,
         ),

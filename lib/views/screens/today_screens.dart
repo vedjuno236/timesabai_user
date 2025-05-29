@@ -240,7 +240,7 @@ class _TodayScreensState extends State<TodayScreens> {
                     height: double.infinity,
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Container(
                           margin: const EdgeInsets.only(top: 30),
                           child: Column(
@@ -249,32 +249,55 @@ class _TodayScreensState extends State<TodayScreens> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  CircleAvatar(
+                                    radius: 45,
+                                    backgroundColor: Colors.white,
+                                    child: CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: Employee
+                                              .profileimage.isNotEmpty
+                                          ? NetworkImage(Employee.profileimage)
+                                          : const NetworkImage(
+                                              'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                                      onBackgroundImageError:
+                                          (exception, stackTrace) =>
+                                              const Icon(Icons.error),
+                                      child: Employee.profileimage.isEmpty
+                                          ? const Icon(Icons.person)
+                                          : null,
+                                    ),
+                                  ).animate().scaleXY(
+                                      begin: 0,
+                                      end: 1,
+                                      delay: 300.ms,
+                                      duration: 300.ms,
+                                      curve: Curves.easeInOutCubic),
                                   // Stack(
                                   //   children: [
-                                  //     // CircleAvatar(
-                                  //     //   radius: 45,
-                                  //     //   backgroundColor: Colors.white,
-                                  //     //   child: CircleAvatar(
-                                  //     //     radius: 40,
-                                  //     //     backgroundImage: Employee
-                                  //     //             .profileimage.isNotEmpty
-                                  //     //         ? NetworkImage(
-                                  //     //             Employee.profileimage)
-                                  //     //         : const NetworkImage(
-                                  //     //             'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                                  //     //     onBackgroundImageError:
-                                  //     //         (exception, stackTrace) =>
-                                  //     //             const Icon(Icons.error),
-                                  //     //     child: Employee.profileimage.isEmpty
-                                  //     //         ? const Icon(Icons.person)
-                                  //     //         : null,
-                                  //     //   ),
-                                  //     // ).animate().scaleXY(
-                                  //     //     begin: 0,
-                                  //     //     end: 1,
-                                  //     //     delay: 300.ms,
-                                  //     //     duration: 300.ms,
-                                  //     //     curve: Curves.easeInOutCubic),
+                                  // CircleAvatar(
+                                  //   radius: 45,
+                                  //   backgroundColor: Colors.white,
+                                  //   child: CircleAvatar(
+                                  //     radius: 40,
+                                  //     backgroundImage: Employee
+                                  //             .profileimage.isNotEmpty
+                                  //         ? NetworkImage(
+                                  //             Employee.profileimage)
+                                  //         : const NetworkImage(
+                                  //             'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                                  //     onBackgroundImageError:
+                                  //         (exception, stackTrace) =>
+                                  //             const Icon(Icons.error),
+                                  //     child: Employee.profileimage.isEmpty
+                                  //         ? const Icon(Icons.person)
+                                  //         : null,
+                                  //   ),
+                                  // ).animate().scaleXY(
+                                  //     begin: 0,
+                                  //     end: 1,
+                                  //     delay: 300.ms,
+                                  //     duration: 300.ms,
+                                  //     curve: Curves.easeInOutCubic),
 
                                   //     lottie.Lottie.asset(
                                   //         'assets/svg/animation.json',
@@ -297,36 +320,36 @@ class _TodayScreensState extends State<TodayScreens> {
                                   //       ),
                                   //   ],
                                   // ),
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      lottie.Lottie.asset(
-                                        'assets/svg/animation.json',
-                                        width: 165,
-                                        height: 165,
-                                      ),
-                                      CircleAvatar(
-                                        radius: 45,
-                                        backgroundColor:
-                                            Colors.white.withOpacity(0.4),
-                                        child: CircleAvatar(
-                                          radius: 40,
-                                          backgroundImage: Employee
-                                                  .profileimage.isNotEmpty
-                                              ? NetworkImage(
-                                                  Employee.profileimage)
-                                              : const NetworkImage(
-                                                  'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                                          onBackgroundImageError:
-                                              (exception, stackTrace) =>
-                                                  const Icon(Icons.error),
-                                          child: Employee.profileimage.isEmpty
-                                              ? const Icon(Icons.person)
-                                              : null,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  // Stack(
+                                  //   alignment: Alignment.center,
+                                  //   children: [
+                                  //     lottie.Lottie.asset(
+                                  //       'assets/svg/animation.json',
+                                  //       width: 165,
+                                  //       height: 165,
+                                  //     ),
+                                  //     CircleAvatar(
+                                  //       radius: 45,
+                                  //       backgroundColor:
+                                  //           Colors.white.withOpacity(0.4),
+                                  //       child: CircleAvatar(
+                                  //         radius: 40,
+                                  //         backgroundImage: Employee
+                                  //                 .profileimage.isNotEmpty
+                                  //             ? NetworkImage(
+                                  //                 Employee.profileimage)
+                                  //             : const NetworkImage(
+                                  //                 'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
+                                  //         onBackgroundImageError:
+                                  //             (exception, stackTrace) =>
+                                  //                 const Icon(Icons.error),
+                                  //         child: Employee.profileimage.isEmpty
+                                  //             ? const Icon(Icons.person)
+                                  //             : null,
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
@@ -334,7 +357,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                         Employee.firstName,
                                         style: GoogleFonts.notoSansLao(
                                           textStyle: const TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
@@ -344,7 +367,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                         "ID:${Employee.employeeId}",
                                         style: GoogleFonts.notoSansLao(
                                           textStyle: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
@@ -354,7 +377,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                         'ຕໍາແໜ່ງ: ${Employee.positionModel?.name ?? 'ບໍ່ມີຂໍ້ມູນ'}',
                                         style: GoogleFonts.notoSansLao(
                                           textStyle: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
@@ -364,7 +387,7 @@ class _TodayScreensState extends State<TodayScreens> {
                                         "ສັງກັດຢູ່ພາກ:${Employee.departmentModel?.name ?? 'ບໍ່ມີຂໍ້ມູນ'}",
                                         style: GoogleFonts.notoSansLao(
                                           textStyle: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
@@ -1072,10 +1095,14 @@ class _TodayScreensState extends State<TodayScreens> {
                                             strokeWidth: 1,
                                           ),
                                         },
-                                        myLocationButtonEnabled: false,
+                                        myLocationButtonEnabled: true,
                                         myLocationEnabled: true,
-                                        zoomControlsEnabled: false,
+                                        zoomControlsEnabled: true,
                                         zoomGesturesEnabled: true,
+                                        // myLocationButtonEnabled: true,
+                                        // myLocationEnabled: true,
+                                        // zoomControlsEnabled: true,
+                                        // zoomGesturesEnabled: true,
                                         mapType: MapType.hybrid,
                                       ),
                               ).animate().scaleXY(

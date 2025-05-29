@@ -117,7 +117,7 @@ class _ProfileScreensState extends State<ProfileScreens> {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-              backgroundColor: Color(0xFF577DF4),
+              backgroundColor: isDarkMode ? Colors.black38 : Color(0xFF577DF4),
               iconTheme: IconThemeData(color: Colors.white),
               centerTitle: true,
               title: Text(
@@ -130,7 +130,7 @@ class _ProfileScreensState extends State<ProfileScreens> {
                   ),
                 ),
               )),
-          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          backgroundColor: isDarkMode ? Color(0xff262626) : Colors.white,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(10),

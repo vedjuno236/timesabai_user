@@ -244,22 +244,20 @@ import 'components/model/user_model/user_model.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize AwesomeNotifications
   AwesomeNotifications().initialize(
-    null,
+  null,
     [
       NotificationChannel(
-        channelKey: 'Key1',
-        channelName: 'Alerts',
-        channelDescription: 'Notification tests as alerts',
+        channelKey: 'key1',
+        channelName: 'Basic Notifications',
+        channelDescription: 'Notification channel for basic tests',
+        defaultColor: const Color(0xFF9D50DD),
+        ledColor: Colors.white,
         playSound: true,
-        onlyAlertOnce: true,
-        groupAlertBehavior: GroupAlertBehavior.Children,
+        enableLights: true,
+        enableVibration: true,
         importance: NotificationImportance.High,
-        defaultPrivacy: NotificationPrivacy.Private,
-        defaultColor: Colors.deepPurple,
-        ledColor: Colors.deepPurple,
-      ),
+      )
     ],
   );
 
@@ -272,28 +270,27 @@ void main() async {
 
   final cron = Cron();
 
- cron.schedule(Schedule.parse('*/1 * * * *'), () async {  // Every minute
-  logger.d('Clock IN notification triggered at ${DateTime.now()}!');
-});
+  cron.schedule(Schedule.parse('*/1 * * * *'), () async {
+    // Every minute
+    logger.d('Clock IN notification triggered at ${DateTime.now()}!');
+  });
 
-
- cron.schedule(Schedule.parse('39 15 * * *'), () async {
-  print('Current Time: ${DateTime.now()}');
-  logger.d('Clock IN notification triggered at ${DateTime.now()}!');
-  await AwesomeNotifications().createNotification(
-    content: NotificationContent(
-      id: 2,
-      channelKey: 'Key1',
-      title: 'ຮອດເວວາເຂົ້າວຽກແລ້ວ',
-      body: 'ຢ່າລື່ມ Check IN',
-      bigPicture:
-          'https://scontent.fvte2-2.fna.fbcdn.net/v/t39.30808-6/451313776_1851048702083685_1221525355612101493_n.jpg',
-      notificationLayout: NotificationLayout.BigPicture,
-      backgroundColor: Colors.blueAccent,
-    ),
-  );
-});
-
+  cron.schedule(Schedule.parse('39 15 * * *'), () async {
+    print('Current Time: ${DateTime.now()}');
+    logger.d('Clock IN notification triggered at ${DateTime.now()}!');
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 2,
+        channelKey: 'Key1',
+        title: 'ຮອດເວວາເຂົ້າວຽກແລ້ວ',
+        body: 'ຢ່າລື່ມ Check IN',
+        bigPicture:
+            'https://scontent.fvte2-2.fna.fbcdn.net/v/t39.30808-6/451313776_1851048702083685_1221525355612101493_n.jpg',
+        notificationLayout: NotificationLayout.BigPicture,
+        backgroundColor: Colors.blueAccent,
+      ),
+    );
+  });
 
   cron.schedule(Schedule.parse('17 15 * * 1-5'), () async {
     logger.d('Clock OUT notification triggered!');
@@ -415,6 +412,6 @@ class _AuthCheckState extends State<AuthCheck> {
 }
 
 var logger = Logger(
-  filter: DevelopmentFilter(),  // Shows all logs in development mode
+  filter: DevelopmentFilter(), // Shows all logs in development mode
   printer: PrettyPrinter(),
 );

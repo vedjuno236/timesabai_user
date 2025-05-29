@@ -29,7 +29,6 @@ class _HomeIndexState extends State<HomeIndex> {
 
   List<ImageData> navigation = [
     ImageData("assets/images/home.png", "ໜ້າຫຼັກ"),
-
     ImageData("assets/images/news.png", "ຂໍລາພັກ"),
     ImageData("assets/images/analytic.png", "ມາການ"),
     ImageData("assets/images/calendar.png", "ລາພັກ"),
@@ -51,6 +50,7 @@ class _HomeIndexState extends State<HomeIndex> {
       Employee.employeeId = prefs.getString('token') ?? '';
     });
   }
+
   void getId() async {
     try {
       // Fetch Employee Data
@@ -85,7 +85,8 @@ class _HomeIndexState extends State<HomeIndex> {
                 .get();
 
             if (departmentDoc.exists) {
-              Employee.departmentModel = DepartmentModel.fromFirestore(departmentDoc);
+              Employee.departmentModel =
+                  DepartmentModel.fromFirestore(departmentDoc);
               print("Department Name: ${Employee.departmentModel?.name}");
             } else {
               print("No department found for this employee.");
@@ -192,10 +193,7 @@ class _HomeIndexState extends State<HomeIndex> {
         } else {
           print("No province ID found for this employee.");
         }
-        setState(() {
-
-        });
-
+        setState(() {});
       } else {
         print("No employee found with this employeeId: ${Employee.employeeId}");
       }
@@ -203,7 +201,6 @@ class _HomeIndexState extends State<HomeIndex> {
       print("Error fetching employee: $e");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +212,10 @@ class _HomeIndexState extends State<HomeIndex> {
         index: currentIndex,
         children: [
           currentIndex == 0 ? TodayScreens() : Container(),
-          currentIndex == 1 ? Laphak(): Container(),
-        new   History(),
-         new  HistoryLeave(),
-        new   ProfileScreens(),
+          currentIndex == 1 ? Laphak() : Container(),
+          new History(),
+          new HistoryLeave(),
+          new ProfileScreens(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -230,7 +227,7 @@ class _HomeIndexState extends State<HomeIndex> {
         ),
         decoration: const BoxDecoration(
           // color: Color(0xFFF3684E9),
-          color:Colors.white,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -260,15 +257,19 @@ class _HomeIndexState extends State<HomeIndex> {
                       children: [
                         Image.asset(
                           navigation[i].imagePath,
-                          height: i == currentIndex ? 30 : 26,
-                          color: i == currentIndex ? Color(0xFF577DF4) : Colors.black,
+                          height: i == currentIndex ? 28 : 25,
+                          color: i == currentIndex
+                              ? Color(0xFF577DF4)
+                              : Colors.black,
                         ),
                         const SizedBox(height: 4),
                         Text(
                           navigation[i].text,
                           style: GoogleFonts.notoSansLao(
-                            color: i == currentIndex ?  Color(0xFF577DF4) : Colors.black,
-                            fontSize: i == currentIndex ? 15 : 10,
+                            color: i == currentIndex
+                                ? Color(0xFF577DF4)
+                                : Colors.black,
+                            fontSize: i == currentIndex ? 10 : 10,
                           ),
                         ),
                       ],

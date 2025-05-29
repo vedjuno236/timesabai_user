@@ -658,7 +658,7 @@ class _EditScreenState extends State<EditScreen> {
               padding: const EdgeInsets.all(10.0),
               child: Column(children: [
                 Container(
-                  height: 140,
+                  height: 145,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -680,30 +680,33 @@ class _EditScreenState extends State<EditScreen> {
                           Align(
                             alignment: Alignment.center,
                             child: CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Colors.transparent,
-                              child: ClipOval(
-                                child: _profileImage != null
-                                    ? Image.file(
-                                        _profileImage!,
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : CachedNetworkImage(
-                                        imageUrl: Employee
-                                                .profileimage.isNotEmpty
-                                            ? Employee.profileimage
-                                            : 'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                const LoadingPlatformV1(),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                      ),
+                              radius: 55,
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.transparent,
+                                child: ClipOval(
+                                  child: _profileImage != null
+                                      ? Image.file(
+                                          _profileImage!,
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : CachedNetworkImage(
+                                          imageUrl: Employee
+                                                  .profileimage.isNotEmpty
+                                              ? Employee.profileimage
+                                              : 'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg',
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              const LoadingPlatformV1(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                ),
                               ),
                             ),
                           ).animate().scaleXY(
@@ -727,7 +730,7 @@ class _EditScreenState extends State<EditScreen> {
                                   color: Colors.blue,
                                 ),
                                 child: const Icon(
-                                  Icons.edit_outlined,
+                                  Icons.camera_alt,
                                   color: Colors.white,
                                   size: 20,
                                 ),
