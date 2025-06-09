@@ -1082,9 +1082,6 @@
 //   String? leaveTypeId;
 //   String? selectedLeaveType;
 
-
-
-
 //   // Future<void> _loadEmployeeId() async {
 //   //   final prefs = await SharedPreferences.getInstance();
 //   //   Employee.employeeId = prefs.getString('token') ?? '';
@@ -1992,10 +1989,6 @@
 //     );
 //   }
 // }
-
-
-
-
 import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -2962,23 +2955,24 @@ class _DayScreensState extends State<DayScreens> {
                    
                     _saveDayData().whenComplete((){
                       notify();
-                    });
-
-                    setState(() {
+                        setState(() {
                       isLoading = false;
                     });
+                    });
+
+                  
                   },
             style: OutlinedButton.styleFrom(
               backgroundColor: Colors.blueAccent,
               side: const BorderSide(
-                  color: Colors.white), // Ensure to add const here
+                  color: Colors.white), 
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: isLoading
                 ? Text(
-                    'ກໍາລັງສົ່ງຄໍາຂໍລາພັກ .....', // Fixed the placement of the text
+                    'ກໍາລັງສົ່ງຄໍາຂໍລາພັກ .....',
                     style: GoogleFonts.notoSansLao(
                       textStyle: const TextStyle(
                         fontSize: 18,
@@ -3874,10 +3868,11 @@ class _TimesScreensState extends State<TimesScreens> {
 
                     _saveTimeData().whenComplete((){
                       notify();
-                    });
-                    setState(() {
+                        setState(() {
                       isLoading = false;
                     });
+                    });
+
                   },
             style: OutlinedButton.styleFrom(
               backgroundColor: Colors.blueAccent,

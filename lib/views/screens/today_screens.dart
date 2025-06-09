@@ -6,17 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:rive/rive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:timesabai/components/model/weather_model/weather_model.dart';
 import 'package:timesabai/components/services/weather_service.dart';
 import 'package:timesabai/main.dart';
+import 'package:timesabai/views/screens/out_door_screens.dart';
 import 'package:timesabai/wearth.dart';
 import '../../components/model/user_model/user_model.dart';
 import 'package:lottie/lottie.dart' as lottie;
@@ -74,6 +77,34 @@ class _TodayScreensState extends State<TodayScreens> {
     });
   }
 
+  Future<void> saveSettingsToSharedPreferences() async {
+    try {
+      double targetLatitudes = 0.0;
+      double targetLongitudes = 0.0;
+      double allowedDistances = 0.0;
+
+      QuerySnapshot settingsSnapshot =
+          await FirebaseFirestore.instance.collection("settings").get();
+
+      for (DocumentSnapshot doc in settingsSnapshot.docs) {
+        if (doc.exists) {
+          targetLatitudes = (doc['targetLatitude'] as num).toDouble();
+          targetLongitudes = (doc['targetLongitude'] as num).toDouble();
+          allowedDistances = (doc['allowedDistance'] as num).toDouble();
+        }
+      }
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      await prefs.setDouble('targetLatitude', targetLatitudes);
+      await prefs.setDouble('targetLongitude', targetLongitudes);
+      await prefs.setDouble('allowedDistance', allowedDistances);
+    } catch (e) {
+      print('Error saving settings to SharedPreferences: $e');
+      throw Exception('Failed to save settings: $e');
+    }
+  }
+
   @override
   void initState() {
     weatherInfo = WeatherData(
@@ -89,6 +120,7 @@ class _TodayScreensState extends State<TodayScreens> {
     );
     myWeather();
     super.initState();
+    saveSettingsToSharedPreferences();
     preload();
     _loadTodayRecord();
     _getCurrentLocation();
@@ -216,6 +248,205 @@ class _TodayScreensState extends State<TodayScreens> {
     }
   }
 
+  Future<bool> validateUserLocation(BuildContext context) async {
+    try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        StatusAlert.show(
+          context,
+          title: 'ຂໍ້ຜິດພາດ',
+          subtitle: 'ກະລຸນາເປີດການບໍລິການສະຖານທີ່',
+          titleOptions: StatusAlertTextConfiguration(
+            style: GoogleFonts.notoSansLao(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          subtitleOptions: StatusAlertTextConfiguration(
+            style: GoogleFonts.notoSansLao(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          configuration: const IconConfiguration(
+            icon: Icons.error_outline_sharp,
+            color: Colors.redAccent,
+            size: 80,
+          ),
+          maxWidth: 260,
+          duration: const Duration(seconds: 5),
+        );
+        return false;
+      }
+
+      // Check location permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          StatusAlert.show(
+            context,
+            title: 'ຂໍ້ຜິດພາດ',
+            subtitle: 'ກະລຸນາອະນຸຍາດການເຂົ້າເຖິງສະຖານທີ່',
+            titleOptions: StatusAlertTextConfiguration(
+              style: GoogleFonts.notoSansLao(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            subtitleOptions: StatusAlertTextConfiguration(
+              style: GoogleFonts.notoSansLao(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            configuration: const IconConfiguration(
+              icon: Icons.error_outline_sharp,
+              color: Colors.redAccent,
+              size: 80,
+            ),
+            maxWidth: 260,
+            duration: const Duration(seconds: 5),
+          );
+          return false;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        StatusAlert.show(
+          context,
+          title: 'ຂໍ້ຜິດພາດ',
+          subtitle: 'ການເຂົ້າເຖິງສະຖານທີ່ຖືກປະຕິເສດຖາວອນ',
+          titleOptions: StatusAlertTextConfiguration(
+            style: GoogleFonts.notoSansLao(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          subtitleOptions: StatusAlertTextConfiguration(
+            style: GoogleFonts.notoSansLao(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          configuration: const IconConfiguration(
+            icon: Icons.error_outline_sharp,
+            color: Colors.redAccent,
+            size: 80,
+          ),
+          maxWidth: 260,
+          duration: const Duration(seconds: 5),
+        );
+        return false;
+      }
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final double targetLatitude = prefs.getDouble('targetLatitude') ?? 0.0;
+      final double targetLongitude = prefs.getDouble('targetLongitude') ?? 0.0;
+      final double allowedDistance = prefs.getDouble('allowedDistance') ?? 0.0;
+
+      Position locationPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      double distanceInMeters = Geolocator.distanceBetween(
+        locationPosition.latitude,
+        locationPosition.longitude,
+        targetLatitude,
+        targetLongitude,
+      );
+
+      print('Distance: $distanceInMeters, Allowed: $allowedDistance');
+
+      if (distanceInMeters > allowedDistance) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const OutDoorScreens()),
+        );
+
+        // StatusAlert.show(
+        //   context,
+        //   title: 'ຂໍອະໄພ ທ່ານບໍ່ສາມາດບັນທືກຂໍ້ມູນໄດ້ !!!',
+        //   subtitle: 'ທ່ານໄດ້ຢູ່ໄກຈາກຕໍາແໜ່ງໃນການບັນທືກເຂົ້າ - ອອກ',
+        //   titleOptions: StatusAlertTextConfiguration(
+        //     style: GoogleFonts.notoSansLao(
+        //       textStyle: const TextStyle(
+        //         fontWeight: FontWeight.bold,
+        //         fontSize: 20,
+        //       ),
+        //     ),
+        //   ),
+        //   subtitleOptions: StatusAlertTextConfiguration(
+        //     style: GoogleFonts.notoSansLao(
+        //       textStyle: const TextStyle(
+        //         fontWeight: FontWeight.bold,
+        //         fontSize: 15,
+        //       ),
+        //     ),
+        //   ),
+        //   backgroundColor: Colors.white,
+        //   configuration: const IconConfiguration(
+        //     icon: Icons.error_outline_sharp,
+        //     color: Colors.redAccent,
+        //     size: 80,
+        //   ),
+        //   maxWidth: 260,
+        //   duration: const Duration(seconds: 5),
+        // );
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      print('Error validating location: $e');
+      StatusAlert.show(
+        context,
+        title: 'ຂໍ້ຜິດພາດ',
+        subtitle: 'ບໍ່ສາມາດດຶງຂໍ້ມູນສະຖານທີ່ໄດ້',
+        titleOptions: StatusAlertTextConfiguration(
+          style: GoogleFonts.notoSansLao(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        subtitleOptions: StatusAlertTextConfiguration(
+          style: GoogleFonts.notoSansLao(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        configuration: const IconConfiguration(
+          icon: Icons.error_outline_sharp,
+          color: Colors.redAccent,
+          size: 80,
+        ),
+        maxWidth: 260,
+        duration: const Duration(seconds: 5),
+      );
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isComplete = clockInPM != "------" && clockOutPM != "------";
@@ -272,84 +503,6 @@ class _TodayScreensState extends State<TodayScreens> {
                                       delay: 300.ms,
                                       duration: 300.ms,
                                       curve: Curves.easeInOutCubic),
-                                  // Stack(
-                                  //   children: [
-                                  // CircleAvatar(
-                                  //   radius: 45,
-                                  //   backgroundColor: Colors.white,
-                                  //   child: CircleAvatar(
-                                  //     radius: 40,
-                                  //     backgroundImage: Employee
-                                  //             .profileimage.isNotEmpty
-                                  //         ? NetworkImage(
-                                  //             Employee.profileimage)
-                                  //         : const NetworkImage(
-                                  //             'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                                  //     onBackgroundImageError:
-                                  //         (exception, stackTrace) =>
-                                  //             const Icon(Icons.error),
-                                  //     child: Employee.profileimage.isEmpty
-                                  //         ? const Icon(Icons.person)
-                                  //         : null,
-                                  //   ),
-                                  // ).animate().scaleXY(
-                                  //     begin: 0,
-                                  //     end: 1,
-                                  //     delay: 300.ms,
-                                  //     duration: 300.ms,
-                                  //     curve: Curves.easeInOutCubic),
-
-                                  //     lottie.Lottie.asset(
-                                  //         'assets/svg/animation.json',
-                                  //         width: 70,
-                                  //         height: 70),
-                                  //              CircleAvatar(
-                                  //         radius: 40,
-                                  //         backgroundImage: Employee
-                                  //                 .profileimage.isNotEmpty
-                                  //             ? NetworkImage(
-                                  //                 Employee.profileimage)
-                                  //             : const NetworkImage(
-                                  //                 'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                                  //         onBackgroundImageError:
-                                  //             (exception, stackTrace) =>
-                                  //                 const Icon(Icons.error),
-                                  //         child: Employee.profileimage.isEmpty
-                                  //             ? const Icon(Icons.person)
-                                  //             : null,
-                                  //       ),
-                                  //   ],
-                                  // ),
-                                  // Stack(
-                                  //   alignment: Alignment.center,
-                                  //   children: [
-                                  //     lottie.Lottie.asset(
-                                  //       'assets/svg/animation.json',
-                                  //       width: 165,
-                                  //       height: 165,
-                                  //     ),
-                                  //     CircleAvatar(
-                                  //       radius: 45,
-                                  //       backgroundColor:
-                                  //           Colors.white.withOpacity(0.4),
-                                  //       child: CircleAvatar(
-                                  //         radius: 40,
-                                  //         backgroundImage: Employee
-                                  //                 .profileimage.isNotEmpty
-                                  //             ? NetworkImage(
-                                  //                 Employee.profileimage)
-                                  //             : const NetworkImage(
-                                  //                 'https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg'),
-                                  //         onBackgroundImageError:
-                                  //             (exception, stackTrace) =>
-                                  //                 const Icon(Icons.error),
-                                  //         child: Employee.profileimage.isEmpty
-                                  //             ? const Icon(Icons.person)
-                                  //             : null,
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
@@ -750,6 +903,13 @@ class _TodayScreensState extends State<TodayScreens> {
                                             key: key,
                                             onSubmit: () async {
                                               try {
+                                                bool isLocationValid =
+                                                    await validateUserLocation(
+                                                        context);
+                                                if (!isLocationValid) {
+                                                  key.currentState?.reset();
+                                                  return;
+                                                }
                                                 QuerySnapshot snap =
                                                     await FirebaseFirestore
                                                         .instance
@@ -767,104 +927,6 @@ class _TodayScreensState extends State<TodayScreens> {
                                                   String currentTime =
                                                       DateFormat('hh:mm')
                                                           .format(now);
-
-                                                  // Get location settings
-                                                  double targetLatitudes = 0.0;
-                                                  double targetLongitudes = 0.0;
-                                                  double allowedDistances = 0.0;
-                                                  QuerySnapshot
-                                                      settingsSnapshot =
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              "settings")
-                                                          .get();
-
-                                                  for (DocumentSnapshot doc
-                                                      in settingsSnapshot
-                                                          .docs) {
-                                                    if (doc.exists) {
-                                                      targetLatitudes =
-                                                          (doc['targetLatitude']
-                                                                  as num)
-                                                              .toDouble();
-                                                      targetLongitudes =
-                                                          (doc['targetLongitude']
-                                                                  as num)
-                                                              .toDouble();
-                                                      allowedDistances =
-                                                          (doc['allowedDistance']
-                                                                  as num)
-                                                              .toDouble();
-                                                    }
-                                                  }
-
-                                                  // Get current location
-                                                  Position locationPosition =
-                                                      await Geolocator
-                                                          .getCurrentPosition(
-                                                              desiredAccuracy:
-                                                                  LocationAccuracy
-                                                                      .high);
-                                                  double distanceInMeters =
-                                                      Geolocator
-                                                          .distanceBetween(
-                                                    locationPosition.latitude,
-                                                    locationPosition.longitude,
-                                                    targetLatitudes,
-                                                    targetLongitudes,
-                                                  );
-                                                  print(
-                                                      'Distance: $distanceInMeters, Allowed: $allowedDistances');
-
-                                                  // Validate location
-                                                  if (distanceInMeters >
-                                                      allowedDistances) {
-                                                    StatusAlert.show(
-                                                      context,
-                                                      title:
-                                                          'ຂໍອະໄພ ທ່ານບໍ່ສາມາດບັນທືກຂໍ້ມູນໄດ້ !!!',
-                                                      subtitle:
-                                                          'ທ່ານໄດ້ຢູ່ໄກຈາກຕໍາແໜ່ງໃນການບັນທືກເຂົ້າ - ອອກ',
-                                                      titleOptions:
-                                                          StatusAlertTextConfiguration(
-                                                        style: GoogleFonts
-                                                            .notoSansLao(
-                                                          textStyle:
-                                                              const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      subtitleOptions:
-                                                          StatusAlertTextConfiguration(
-                                                        style: GoogleFonts
-                                                            .notoSansLao(
-                                                          textStyle:
-                                                              const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      configuration:
-                                                          const IconConfiguration(
-                                                        icon: Icons
-                                                            .error_outline_sharp,
-                                                        color: Colors.redAccent,
-                                                        size: 80,
-                                                      ),
-                                                      maxWidth: 260,
-                                                      duration: const Duration(
-                                                          seconds: 5),
-                                                    );
-                                                    return;
-                                                  }
 
                                                   // Determine late status
                                                   bool isLate = false;
@@ -885,13 +947,12 @@ class _TodayScreensState extends State<TodayScreens> {
                                                           0)) &&
                                                       clockInAM == "------") {
                                                     isLate = now.isAfter(
-                                                      DateTime(
-                                                          now.year,
-                                                          now.month,
-                                                          now.day,
-                                                          8,
-                                                          0),
-                                                    );
+                                                        DateTime(
+                                                            now.year,
+                                                            now.month,
+                                                            now.day,
+                                                            8,
+                                                            0));
                                                     print(
                                                         'Recording clockInAM at $currentTime');
                                                     setState(() {
@@ -909,11 +970,30 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'status': isLate
                                                           ? 'ມາວຽກຊ້າ'
                                                           : 'ມາວຽກ',
+                                                      'type_clock_in':
+                                                          'ຫ້ອງການ',
+                                                      'image':
+                                                          '', // Store the Firebase Storage URL
+                                                      'title': '',
                                                     }, SetOptions(merge: true));
+                                                    // Show success toast
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'ບັນທຶກເຂົ້າວຽກຕອນເຊົ້າສຳເລັດ',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      textColor: Colors.white,
+                                                      fontSize: 15.0,
+                                                      webPosition: "center",
+                                                      webBgColor: "#4CAF50",
+                                                    );
                                                   } else if (clockInAM !=
                                                           "------" &&
                                                       clockOutAM == "------") {
-                                                    // Record clockOutAM only if clockInAM is set
                                                     logger.d(
                                                         'Recording clockOutAM at $currentTime');
                                                     setState(() {
@@ -923,7 +1003,27 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'clockOutAM': currentTime,
                                                       'checkOutLocation':
                                                           address,
+                                                      'type_clock_in':
+                                                          'ຫ້ອງການ',
+                                                      'image':
+                                                          '', // Store the Firebase Storage URL
+                                                      'title': '',
                                                     });
+                                                    // Show success toast
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'ບັນທຶກອອກວຽກຕອນເຊົ້າສຳເລັດ',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      textColor: Colors.white,
+                                                      fontSize: 15.0,
+                                                      webPosition: "center",
+                                                      webBgColor: "#4CAF50",
+                                                    );
                                                   } else if (now.isAfter(
                                                           DateTime(
                                                               now.year,
@@ -932,15 +1032,13 @@ class _TodayScreensState extends State<TodayScreens> {
                                                               12,
                                                               0)) &&
                                                       clockInPM == "------") {
-                                                    // After 12:00 PM, record clockInPM
                                                     isLate = now.isAfter(
-                                                      DateTime(
-                                                          now.year,
-                                                          now.month,
-                                                          now.day,
-                                                          13,
-                                                          00),
-                                                    );
+                                                        DateTime(
+                                                            now.year,
+                                                            now.month,
+                                                            now.day,
+                                                            13,
+                                                            00));
                                                     logger.d(
                                                         'Recording clockInPM at $currentTime');
                                                     setState(() {
@@ -958,7 +1056,27 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'status': isLate
                                                           ? 'ມາວຽກຊ້າ'
                                                           : 'ມາວຽກ',
+                                                      'type_clock_out':
+                                                          'ຫ້ອງການ',
+                                                      'image':
+                                                          '', // Store the Firebase Storage URL
+                                                      'title': '',
                                                     }, SetOptions(merge: true));
+                                                    // Show success toast
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'ບັນທຶກເຂົ້າວຽກຕອນບ່າຍສຳເລັດ',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      textColor: Colors.white,
+                                                      fontSize: 15.0,
+                                                      webPosition: "center",
+                                                      webBgColor: "#4CAF50",
+                                                    );
                                                   } else if (clockInPM !=
                                                           "------" &&
                                                       clockOutPM == "------") {
@@ -971,7 +1089,27 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'clockOutPM': currentTime,
                                                       'checkOutLocation':
                                                           address,
+                                                      'type_clock_out':
+                                                          'ຫ້ອງການ',
+                                                      'image':
+                                                          '', // Store the Firebase Storage URL
+                                                      'title': '',
                                                     });
+                                                    // Show success toast
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'ບັນທຶກອອກວຽກຕອນບ່າຍສຳເລັດ',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      textColor: Colors.white,
+                                                      fontSize: 15.0,
+                                                      webPosition: "center",
+                                                      webBgColor: "#4CAF50",
+                                                    );
                                                   } else {
                                                     print(
                                                         'No action taken: Invalid state or all check-ins/outs complete');
@@ -985,50 +1123,37 @@ class _TodayScreensState extends State<TodayScreens> {
                                                 } else {
                                                   print(
                                                       "No employee found with ID: ${Employee.employeeId}");
+                                                  // Optional: Show toast for no employee found
+                                                  Fluttertoast.showToast(
+                                                    msg:
+                                                        'ບໍ່ພົບພະນັກງານທີ່ມີ ID: ${Employee.employeeId}',
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.CENTER,
+                                                    backgroundColor:
+                                                        Colors.redAccent,
+                                                    textColor: Colors.white,
+                                                    fontSize: 15.0,
+                                                    webPosition: "center",
+                                                    webBgColor: "#B71C1C",
+                                                  );
                                                 }
                                               } catch (e) {
                                                 print(
                                                     'Error recording time: $e');
-                                                StatusAlert.show(
-                                                  context,
-                                                  title: 'ຂໍ້ຜິດພາດ',
-                                                  subtitle:
+                                                Fluttertoast.showToast(
+                                                  msg:
                                                       'ບໍ່ສາມາດບັນທຶກເວລາໄດ້ ກະລຸນາລອງໃໝ່',
-                                                  titleOptions:
-                                                      StatusAlertTextConfiguration(
-                                                    style:
-                                                        GoogleFonts.notoSansLao(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  subtitleOptions:
-                                                      StatusAlertTextConfiguration(
-                                                    style:
-                                                        GoogleFonts.notoSansLao(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  backgroundColor: Colors.white,
-                                                  configuration:
-                                                      const IconConfiguration(
-                                                    icon: Icons
-                                                        .error_outline_sharp,
-                                                    color: Colors.redAccent,
-                                                    size: 80,
-                                                  ),
-                                                  maxWidth: 260,
-                                                  duration: const Duration(
-                                                      seconds: 5),
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.CENTER,
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                  textColor: Colors.white,
+                                                  fontSize: 15.0,
+                                                  webPosition: "center",
+                                                  webBgColor: "#B71C1C",
                                                 );
                                               }
 
@@ -1146,8 +1271,9 @@ class _TodayScreensState extends State<TodayScreens> {
   Color _getOuterColor() {
     if (clockInAM == "------" || clockInPM == "------") {
       return Colors.white;
-    } else {
-      return const Color(0xFFFDE6E4);
+    } else if (clockOutAM == "------" || clockOutPM == "------") {
+      return Color(0xFFFCE6E4);
     }
+    return Color(0xFFFCE6E4); // Default return value
   }
 }

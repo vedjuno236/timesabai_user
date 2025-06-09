@@ -16,13 +16,17 @@ const MaterialColor kPrimaryColor = MaterialColor(
   },
 );
 const int _kPrimaryColor = 0xFFF56C15;
+const kBack = Color(0xfff37474f);
 
 const kBack87 = Colors.black87;
+const kPinkLigthColor = Color(0xFFFCE6E4);
 const kTextWhiteColor = Colors.white;
 const kTextGrey = Color(0xFF818181);
 const kRedColor = Color(0xFFCE000E);
 const kRedLightColor = Color(0xFFE35954);
 const kPinkColor = Color(0xFFFD4181);
+const kGary = Color(0xFFEDEFF7);
+
 const kBlueColor = Color(0xFF0C66A4);
 const kBlueLightColor = Color(0xFFD4EEED);
 const kYellowColor = Color(0xFFFFFF00);

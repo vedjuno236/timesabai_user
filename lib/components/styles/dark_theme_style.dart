@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timesabai/components/styles/size_config.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     if (isDarkTheme) {
       ///dark theme
       return ThemeData(
-        fontFamily: "BoonHome",
+        fontFamily: GoogleFonts.notoSansLao().fontFamily,
         colorScheme: const ColorScheme.dark(
           primary: Colors.white,
           onPrimary: Color(0xff262626),
