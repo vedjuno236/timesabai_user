@@ -37,6 +37,8 @@ class _TodayScreensState extends State<TodayScreens> {
   String clockOutPM = "------";
   String address = 'Fetching address...';
   bool isLoading = true;
+  String image='';
+    String tilte='';
 
   late GoogleMapController mapController;
   Position? _currentLocation;
@@ -152,6 +154,8 @@ class _TodayScreensState extends State<TodayScreens> {
             clockOutAM = record['clockOutAM'] ?? "------";
             clockInPM = record['clockInPM'] ?? "------";
             clockOutPM = record['clockOutPM'] ?? "------";
+               image = record['image'] ;
+            tilte = record['title'] ;
             if (clockInAM.isEmpty || clockInAM == "----/----")
               clockInAM = "------";
             if (clockOutAM.isEmpty || clockOutAM == "----/----")
@@ -973,8 +977,8 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'type_clock_in':
                                                           'ຫ້ອງການ',
                                                       'image':
-                                                          '', // Store the Firebase Storage URL
-                                                      'title': '',
+                                                          image, 
+                                                      'title': tilte,
                                                     }, SetOptions(merge: true));
                                                     // Show success toast
                                                     Fluttertoast.showToast(
@@ -1006,8 +1010,8 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'type_clock_in':
                                                           'ຫ້ອງການ',
                                                       'image':
-                                                          '', // Store the Firebase Storage URL
-                                                      'title': '',
+                                                          image, // Store the Firebase Storage URL
+                                                      'title': tilte,
                                                     });
                                                     // Show success toast
                                                     Fluttertoast.showToast(
@@ -1059,8 +1063,9 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'type_clock_out':
                                                           'ຫ້ອງການ',
                                                       'image':
-                                                          '', // Store the Firebase Storage URL
-                                                      'title': '',
+                                                          image, // Store the Firebase Storage URL
+                                                      'title': tilte,
+                                                         
                                                     }, SetOptions(merge: true));
                                                     // Show success toast
                                                     Fluttertoast.showToast(
@@ -1092,8 +1097,9 @@ class _TodayScreensState extends State<TodayScreens> {
                                                       'type_clock_out':
                                                           'ຫ້ອງການ',
                                                       'image':
-                                                          '', // Store the Firebase Storage URL
-                                                      'title': '',
+                                                          image, // Store the Firebase Storage URL
+                                                      'title': tilte,
+
                                                     });
                                                     // Show success toast
                                                     Fluttertoast.showToast(
@@ -1142,19 +1148,19 @@ class _TodayScreensState extends State<TodayScreens> {
                                               } catch (e) {
                                                 print(
                                                     'Error recording time: $e');
-                                                Fluttertoast.showToast(
-                                                  msg:
-                                                      'ບໍ່ສາມາດບັນທຶກເວລາໄດ້ ກະລຸນາລອງໃໝ່',
-                                                  toastLength:
-                                                      Toast.LENGTH_LONG,
-                                                  gravity: ToastGravity.CENTER,
-                                                  backgroundColor:
-                                                      Colors.redAccent,
-                                                  textColor: Colors.white,
-                                                  fontSize: 15.0,
-                                                  webPosition: "center",
-                                                  webBgColor: "#B71C1C",
-                                                );
+                                                // Fluttertoast.showToast(
+                                                //   msg:
+                                                //       'ບໍ່ສາມາດບັນທຶກເວລາໄດ້ ກະລຸນາລອງໃໝ່',
+                                                //   toastLength:
+                                                //       Toast.LENGTH_LONG,
+                                                //   gravity: ToastGravity.CENTER,
+                                                //   backgroundColor:
+                                                //       Colors.redAccent,
+                                                //   textColor: Colors.white,
+                                                //   fontSize: 15.0,
+                                                //   webPosition: "center",
+                                                //   webBgColor: "#B71C1C",
+                                                // );
                                               }
 
                                               key.currentState?.reset();

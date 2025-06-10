@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_month_year_picker/simple_month_year_picker.dart';
+import 'package:timesabai/main.dart';
 import 'package:timesabai/views/widgets/date_month_year/shared/month_picker.dart';
 
 import '../../components/model/user_model/user_model.dart';
@@ -245,15 +246,6 @@ class _HistoryState extends State<History> {
                           selectedDate!, currentDate)
                       : [];
 
-                  // Map<String, QueryDocumentSnapshot> recordsMap = {};
-                  // if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                  //   for (var record in snapshot.data!.docs) {
-                  //     DateTime recordDate = record['date'].toDate();
-                  //     String dateKey =
-                  //         DateFormat('yyyy-MM-dd').format(recordDate);
-                  //     recordsMap[dateKey] = record;
-                  //   }
-                  // }
                   Map<String, QueryDocumentSnapshot> recordsMap = {};
                   if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     for (var record in snapshot.data!.docs) {
@@ -282,17 +274,36 @@ class _HistoryState extends State<History> {
                       String checkOutAM = '--:--';
                       String checkInPM = '--:--';
                       String checkOutPM = '--:--';
+                      String statusoutdoor;
 
                       if (record != null) {
-                        // Use Firebase record if available
-                        status = record['status'];
-                        checkInAM = record['clockInAM'];
-                        checkOutAM = record['clockOutAM'];
-                        checkInPM = record['clockInPM'];
-                        checkOutPM = record['clockOutPM'];
+                        logger.d('Record: ${record.data()}');
+                        // Safely check and assign status
+                        status = record.data().toString().contains('status') &&
+                                record['status'] != null
+                            ? record['status'].toString()
+                            : (isWeekend(currentDay) ? 'ວັນພັກ' : 'ຂາດວຽກ');
+                        logger.d('Status: $status');
+
+                        // Safely check and assign status_out_door
+                        statusoutdoor = record
+                                    .data()
+                                    .toString()
+                                    .contains('status_out_door') &&
+                                record['status_out_door'] != null
+                            ? record['status_out_door'].toString()
+                            : (isWeekend(currentDay) ? 'ວັນພັກ' : 'ຂາດວຽກ');
+
+                        // Safely assign clock fields with null checks
+                        checkInAM = record['clockInAM'] ?? '--:--';
+                        checkOutAM = record['clockOutAM'] ?? '--';
+                        checkInPM = record['clockInPM'] ?? '--';
+                        checkOutPM = record['clockOutPM'] ?? '--:';
                       } else {
-                        // If no record, check if it's a weekend
                         status = isWeekend(currentDay) ? 'ວັນພັກ' : 'ຂາດວຽກ';
+                        statusoutdoor =
+                            isWeekend(currentDay) ? 'ວັນພັກ' : 'ຂາດວຽກ';
+                        logger.d('Status (no record): $status');
                       }
 
                       return Padding(
@@ -357,6 +368,7 @@ class _HistoryState extends State<History> {
                                             ),
                                           ),
                                         ),
+                                        const SizedBox(height: 10),
                                         Text(
                                           checkInPM,
                                           style: GoogleFonts.notoSansLao(
@@ -400,6 +412,7 @@ class _HistoryState extends State<History> {
                                             ),
                                           ),
                                         ),
+                                        const SizedBox(height: 10),
                                         Text(
                                           checkOutPM,
                                           style: GoogleFonts.notoSansLao(
@@ -416,31 +429,81 @@ class _HistoryState extends State<History> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 35,
-                                  width: 75,
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      backgroundColor: getStatusColor(status),
-                                      side: BorderSide(
-                                          color: getStatusColor(status)),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      status,
-                                      style: GoogleFonts.notoSansLao(
-                                        textStyle: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                  if (status.isNotEmpty && status != '------') ...[
+                                      SizedBox(
+                                        height: 35,
+                                        width: 75,
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            backgroundColor:
+                                                getStatusColor(status),
+                                            side: BorderSide(
+                                                color: getStatusColor(status)),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          onPressed: () {},
+                                          child: Text(
+                                            status,
+                                            style: GoogleFonts.notoSansLao(
+                                              textStyle: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
+                                      const SizedBox(height: 5),
+                                    ],
+                                    if (record != null &&
+                                        record
+                                            .data()
+                                            .toString()
+                                            .contains('status_out_door') &&
+                                        record['status_out_door'] != null &&
+                                        record['status_out_door']
+                                            .toString()
+                                            .isNotEmpty) ...[
+                                      SizedBox(
+                                        height: 35,
+                                        width: 75,
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            backgroundColor:
+                                                getStatusColor(statusoutdoor),
+                                            side: BorderSide(
+                                                color: getStatusColor(
+                                                    statusoutdoor)),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          onPressed: () {},
+                                          child: Text(
+                                            statusoutdoor,
+                                            style: GoogleFonts.notoSansLao(
+                                              textStyle: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                    ],
+                                  ],
                                 ),
                               ],
                             ),
@@ -469,8 +532,10 @@ class _HistoryState extends State<History> {
         return Colors.red;
       case 'ວັນພັກ':
         return Colors.grey;
+      case 'ໄປປະຊຸມ':
+        return Colors.purpleAccent;
       default:
-        return Colors.blue;
+        return Colors.grey;
     }
   }
 }

@@ -46,6 +46,7 @@ class _OutDoorScreensState extends State<OutDoorScreens> {
   String clockOutAM = "------";
   String clockInPM = "------";
   String clockOutPM = "------";
+  String status = "------";
 
   Position? _currentLocation;
   Future<void> _getCurrentLocation() async {
@@ -120,6 +121,7 @@ class _OutDoorScreensState extends State<OutDoorScreens> {
             clockOutAM = record['clockOutAM'] ?? "------";
             clockInPM = record['clockInPM'] ?? "------";
             clockOutPM = record['clockOutPM'] ?? "------";
+            status = record['status'];
             if (clockInAM.isEmpty || clockInAM == "----/----")
               clockInAM = "------";
             if (clockOutAM.isEmpty || clockOutAM == "----/----")
@@ -207,10 +209,11 @@ class _OutDoorScreensState extends State<OutDoorScreens> {
             'clockInPM': "------",
             'clockOutPM': "------",
             'checkInLocation': address,
-            'status': 'ໄປປະຊຸມ',
+            'status_out_door': 'ໄປປະຊຸມ',
             'type_clock_in': 'ນອກຫ້ອງການ',
             'image': imageUrl,
             'title': description.text,
+               'status': status,
           }, SetOptions(merge: true));
 
           Fluttertoast.showToast(
@@ -259,9 +262,10 @@ class _OutDoorScreensState extends State<OutDoorScreens> {
             'clockInPM': currentTime,
             'clockOutPM': "------",
             'checkInLocation': address,
-            'status': 'ໄປປະຊຸມ',
+            'status_out_door': 'ໄປປະຊຸມ',
+            'status': status,
             'type_clock_out': 'ນອກຫ້ອງການ',
-            'image': imageUrl, // Store the Firebase Storage URL
+            'image': imageUrl,
             'title': description.text,
           }, SetOptions(merge: true));
 
@@ -681,9 +685,7 @@ class _OutDoorScreensState extends State<OutDoorScreens> {
                                           builder: (context) =>
                                               const HomeIndex())).whenComplete(
                                       () => Navigator.pop(context)));
-                                      setState(() {
-                                        
-                                      });
+                              setState(() {});
                             });
 
                             setState(() {
